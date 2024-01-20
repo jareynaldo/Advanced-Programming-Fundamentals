@@ -17,6 +17,8 @@ def printMenu():
     print("6. Logarithm")
     print("7. Display Average \n")
 
+def printLastItem(lastItem):
+    print("Current Result: " + str(lastItem) + "\n")
 
 
 def addition(one, two):
@@ -36,6 +38,17 @@ def exponentiation(one, two):
 
 def logarithm(base, x):
     return math.log(x, base)
+
+def findAverage(total, counter):
+    if total != 0:
+        print("Sum of calculations: " + str(total))
+        print("Number of calculations: " + str(total))
+        print("Average of calculations: " + str(total/counter))
+
+
+        return total / counter
+    else:
+        print("\nError: No calculations yet to average!\n")
 
 
 
@@ -58,51 +71,57 @@ def askForNumbers():
     return firstNumber, secondNumber
 
 # determines which value was chosen from the menu
-def whichValue(userChoice, firstValue, secondValue):
-    if(userChoice == 1):
+def whichValue (userChoice, firstValue, secondValue):
+    if userChoice == 1:
         return addition(firstValue, secondValue)
 
-    elif(userChoice == 2):
+    elif userChoice == 2:
         return subtraction(firstValue, secondValue)
 
-    elif(userChoice == 3):
-        return multiplication(fisrstValue, secondValue)
+    elif userChoice == 3:
+        return multiplication(firstValue, secondValue)
 
-    elif(userChoice == 4):
+    elif userChoice == 4:
         return division(firstValue, secondValue)
 
-    elif(userChoice == 5):
+    elif userChoice == 5:
         return exponentiation(firstValue, secondValue)
 
     else:
         return logarithm(firstValue, secondValue)
 
 
-
-
-
-
 def main():
     userChoice = 1
     checker = True
-
     total = 0
     counter = 0
+    lastValue = 0
+
     while checker:
         printMenu()
         userChoice = askForMenuSelection()
         if userChoice == 0:
+            print("Thank you for using this calculator!")
             quit()
-        choiceOne, ChoiceTwo = askForNumbers()
 
-        if(userChoice != 7):
-            whichValue()
+        if userChoice != 7:
+            # first figures out which opperation should be done,
+            # then the opperation is done and printed
+            # then last value of opperation is uppended to total
+            # and counter is updated
+            firstNumber, secondNumber = askForNumbers()
+            lastValue = whichValue(userChoice, firstNumber, secondNumber)
+            total += lastValue
+            counter += 1
+            printLastItem(lastValue)
+
+        else:
+            # will find the average of the totals
+            findAverage(total, counter)
 
 
-        print(choiceOne, ChoiceTwo)
 
 
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     main()
