@@ -1,6 +1,5 @@
 # Authors: Jose Reynaldo and Olusola Awonusonu
 # Date: January 19th, 2023
-
 import math
 
 
@@ -17,8 +16,10 @@ def printMenu():
     print("6. Logarithm")
     print("7. Display Average \n")
 
+
 def printLastItem(lastItem):
     print("Current Result: " + str(lastItem) + "\n")
+
 
 
 def addition(one, two):
@@ -39,14 +40,15 @@ def exponentiation(one, two):
 def logarithm(base, x):
     return math.log(x, base)
 
+
 def findAverage(total, counter):
     if total != 0:
         print("Sum of calculations: " + str(total))
         print("Number of calculations: " + str(total))
         print("Average of calculations: " + str(total/counter))
 
-
         return total / counter
+
     else:
         print("\nError: No calculations yet to average!\n")
 
@@ -59,8 +61,8 @@ def askForMenuSelection():
 
     return int(userchoice)
 
-# prompts users for what two numbers the opperations
-# should be done with
+
+# prompts users for what two numbers the opperations should be done with
 def askForNumbers():
     print("Enter first operand: ", end="")
     firstNumber = float(input())
@@ -69,6 +71,7 @@ def askForNumbers():
     print()
 
     return firstNumber, secondNumber
+
 
 # determines which value was chosen from the menu
 def whichValue (userChoice, firstValue, secondValue):
@@ -86,7 +89,6 @@ def whichValue (userChoice, firstValue, secondValue):
 
     elif userChoice == 5:
         return exponentiation(firstValue, secondValue)
-
     else:
         return logarithm(firstValue, secondValue)
 
@@ -101,15 +103,14 @@ def main():
     while checker:
         printMenu()
         userChoice = askForMenuSelection()
+
         if userChoice == 0:
             print("Thank you for using this calculator!")
             quit()
 
-        if userChoice != 7:
-            # first figures out which opperation should be done,
-            # then the opperation is done and printed
-            # then last value of opperation is uppended to total
-            # and counter is updated
+        elif userChoice != 7:
+            # first figures out which opperation should be done, then the opperation is done and printed
+            # then last value of opperation is uppended to total and counter is updated
             firstNumber, secondNumber = askForNumbers()
             lastValue = whichValue(userChoice, firstNumber, secondNumber)
             total += lastValue
