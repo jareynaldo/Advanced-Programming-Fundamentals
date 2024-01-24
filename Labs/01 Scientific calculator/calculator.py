@@ -50,7 +50,7 @@ def findAverage(total, counter):
         return total / counter
 
     else:
-        print("\nError: No calculations yet to average!\n")
+        print("Error: No calculations yet to average!\n")
 
 
 
@@ -66,8 +66,17 @@ def askForMenuSelection():
 def askForNumbers():
     print("Enter first operand: ", end="")
     firstNumber = float(input())
+
+    if firstNumber == 0:
+        print("Error: Invalid selection!")
+        quit()
+
     print("Enter second operand: ", end="")
     secondNumber = float(input())
+    if secondNumber == 0:
+        print("Error: Invalid selection!")
+        quit()
+
     print()
 
     return firstNumber, secondNumber
@@ -101,14 +110,18 @@ def main():
     lastValue = 0
 
     while checker:
+        if total ==0:
+            printLastItem(float(lastValue))
         printMenu()
         userChoice = askForMenuSelection()
 
         if userChoice == 0:
-            print("Thank you for using this calculator!")
+            print("Thanks for using this calculator. Goodbye!")
             quit()
 
-        elif userChoice != 7:
+        elif userChoice == 7:
+            findAverage(total, counter)
+        else:
             # first figures out which opperation should be done, then the opperation is done and printed
             # then last value of opperation is uppended to total and counter is updated
             firstNumber, secondNumber = askForNumbers()
@@ -116,10 +129,6 @@ def main():
             total += lastValue
             counter += 1
             printLastItem(lastValue)
-
-        else:
-            # will find the average of the totals
-            findAverage(total, counter)
 
 
 
