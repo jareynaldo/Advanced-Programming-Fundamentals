@@ -1,5 +1,5 @@
 # Authors: Jose Reynaldo and Olusola Awonusonu
-# Date: January 19th, 2023
+# Date: January 25th, 2023
 import math
 
 
@@ -46,19 +46,17 @@ def findAverage(total, counter):
         result = total / counter
         formattedResult = "{:.2f}".format(result)
         print("Sum of calculations: " + str(total))
-        print("Number of calculations: " + str(total))
+        print("Number of calculations: " + str(counter))
         print("Average of calculations: " + formattedResult)
         print()
-
-        return total, counter
 
     else:
         print("Error: No calculations yet to average!\n")
         print()
 
-        userChoice = askForMenuSelection()
-        total, counter = askUsersForNumbers(total, counter, userChoice)
-        return total, counter
+    userChoice = askForMenuSelection()
+    total, counter = askUsersForNumbers(total, counter, userChoice)
+    return total, counter
 
 def askUsersForNumbers(total, counter, userChoice):
     # first figures out which opperation should be done, then the opperation is done and printed
@@ -68,7 +66,7 @@ def askUsersForNumbers(total, counter, userChoice):
         quit()
     firstNumber, secondNumber = askForNumbers()
     lastValue = whichValue(userChoice, firstNumber, secondNumber)
-    total += abs(lastValue)
+    total += lastValue
     counter += 1
     printLastItem(lastValue)
 
@@ -160,6 +158,7 @@ def main():
         if userChoice == 0:
             print("Thanks for using this calculator. Goodbye!")
             quit()
+
 
 
 if __name__ == '__main__':
