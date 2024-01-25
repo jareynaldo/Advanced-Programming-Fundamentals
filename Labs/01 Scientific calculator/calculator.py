@@ -43,14 +43,36 @@ def logarithm(base, x):
 
 def findAverage(total, counter):
     if total != 0:
+        result = total / counter
+        formattedResult = "{:.2f}".format(result)
         print("Sum of calculations: " + str(total))
         print("Number of calculations: " + str(total))
-        print("Average of calculations: " + str(total/counter))
+        print("Average of calculations: " + formattedResult)
+        print()
 
-        return total / counter
+        return total, counter
 
     else:
         print("Error: No calculations yet to average!\n")
+        print()
+
+        userChoice = askForMenuSelection()
+        total, counter = askUsersForNumbers(total, counter, userChoice)
+        return total, counter
+
+def askUsersForNumbers(total, counter, userChoice):
+    # first figures out which opperation should be done, then the opperation is done and printed
+    # then last value of opperation is uppended to total and counter is updated
+    if userChoice == 0:
+        print("Thanks for using this calculator. Goodbye!")
+        quit()
+    firstNumber, secondNumber = askForNumbers()
+    lastValue = whichValue(userChoice, firstNumber, secondNumber)
+    total += abs(lastValue)
+    counter += 1
+    printLastItem(lastValue)
+
+    return total, counter
 
 
 
@@ -68,6 +90,7 @@ def askForNumbers():
     firstNumber = float(input())
 
     if firstNumber == 0:
+        print()
         print("Error: Invalid selection!")
         quit()
 
@@ -102,6 +125,8 @@ def whichValue (userChoice, firstValue, secondValue):
         return logarithm(firstValue, secondValue)
 
 
+
+
 def main():
     userChoice = 1
     checker = True
@@ -112,25 +137,29 @@ def main():
     while checker:
         if total ==0:
             printLastItem(float(lastValue))
+
         printMenu()
         userChoice = askForMenuSelection()
 
         if userChoice == 0:
             print("Thanks for using this calculator. Goodbye!")
             quit()
-
+        elif userChoice < 0:
+            print("Error: Invalid selection!")
+            print()
+            userChoice = askForMenuSelection()
+        elif userChoice > 7:
+            print("Error: Invalid selection!")
+            print()
+            userChoice = askForMenuSelection()
         elif userChoice == 7:
-            findAverage(total, counter)
+            total, counter = findAverage(total, counter)
         else:
-            # first figures out which opperation should be done, then the opperation is done and printed
-            # then last value of opperation is uppended to total and counter is updated
-            firstNumber, secondNumber = askForNumbers()
-            lastValue = whichValue(userChoice, firstNumber, secondNumber)
-            total += lastValue
-            counter += 1
-            printLastItem(lastValue)
+            total, counter = askUsersForNumbers(total, counter, userChoice)
 
-
+        if userChoice == 0:
+            print("Thanks for using this calculator. Goodbye!")
+            quit()
 
 
 if __name__ == '__main__':
