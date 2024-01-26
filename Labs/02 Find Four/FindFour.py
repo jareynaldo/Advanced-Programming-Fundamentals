@@ -62,7 +62,6 @@ def get_initial_board(rows, columns):
         for col in range(columns):
             row.append(".")
         board.append(row)
-
     return board
 
 def print_board(board, height, width):
@@ -75,10 +74,10 @@ def print_board(board, height, width):
             print("__", end="")
 
     print()
-    for i in range(height):
+    for o in range(height):
         print("|", end="")
         for j in range(width):
-            print(board[i][j] + " ", end="")
+            print(board[o][j] + " ", end="")
         print("|")
 
     for k in range(width + 2):
@@ -217,13 +216,13 @@ def is_win_state(chip, board, row, column):
 
     return False
 
-def is_board_full(board):
+def is_board_full(board, width):
     returnValue = False
     counter = 0
-    for j in range(len(board)):
+    for j in range(width):
         if (board[0][j] != "."):
             counter += 1
-    if counter == 4:
+    if counter == width:
         returnValue = True
 
     return False
@@ -262,15 +261,17 @@ def main():
             print("Player 1 won the game!")
             quit()
 
-        checker = is_board_full(board)
+        checker = is_board_full(board, width)
         if checker == True:
             print()
             print("Draw game! Players tied.")
             quit()
 
         choiceOfTwo = playerTwoSelection(width)
+        print()
         board, row = insert_chip(board, choiceOfTwo, playertwoChip)
         print_board(board, width, height)
+        print()
 
         checker = is_win_state(playerOneChip, board, PlayerOneRow, choiceOfTwo )
         if checker == True:
@@ -278,7 +279,7 @@ def main():
             print("Player 2 won the game!")
             quit()
 
-        checker = is_board_full(board)
+        checker = is_board_full(board, width)
         if checker == True:
             print()
             print("Draw game! Players tied.")
