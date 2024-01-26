@@ -7,6 +7,8 @@ def askForHeight():
     height = input()
     if height.isdigit():
         return int(height)
+    elif int(height) < 0:
+        return int(height)
     else:
         while isinstance(height, str):
             print("Error: not a number!")
@@ -19,10 +21,12 @@ def askForWidth():
     width = input()
     if width.isdigit():
         return int(width)
-    else:
-        while isinstance(width, str):
-            print("Error: not a number!")
-            width = askForWidth()
+    elif int(width) < 0:
+        return int(width)
+
+    while isinstance(width, str):
+        print("Error: not a number!")
+        width = askForWidth()
     return width
 
 
@@ -83,24 +87,54 @@ def print_board(board, height, width):
         else:
             print("--", end="")
 
-def isColInBound(choice, column):
+def isColInBoundOne(choice, column):
 
-    while choice < column or choice > column:
+    if choice < 0 or choice >= column:
         print("Error: no such column!")
-        height = playerOneSelection(column)
-
+        choice = playerOneSelection(column)
+    else:
+        return choice
+    return choice
 
 
 def playerOneSelection(column):
-
+    print()
     print("Player 1 - Select a Column: ", end="")
     playerChoice = input()
 
     if playerChoice.isdigit():
-        choice = int(playerChoice)
-        returnVal = isColInBound(choice, column)
-        return returnVal
+        playerChoice = int(playerChoice)
+        return isColInBoundOne(playerChoice, column)
+    elif int(playerChoice) < 0:
+        playerChoice = int(playerChoice)
+        return isColInBoundOne(playerChoice, column)
+    else:
+        while isinstance(playerChoice, str):
+            print("Error: not a number!")
+            playerChoice = playerOneSelection(column)
+    return playerChoice
 
+
+def isColInBoundTwo(choice, column):
+
+    if choice < 0 or choice >= column:
+        print("Error: no such column!")
+        choice = playerOneSelection(column)
+    else:
+        return choice
+    return choice
+
+def playerTwoSelection(column):
+
+    print("Player 2 - Select a Column: ", end="")
+    playerChoice = input()
+
+    if playerChoice.isdigit():
+        playerChoice = int(playerChoice)
+        return isColInBoundTwo(playerChoice, column)
+    elif int(playerChoice) < 0:
+        playerChoice = int(playerChoice)
+        return isColInBoundTwo(playerChoice, column)
     else:
         while isinstance(playerChoice, str):
             print("Error: not a number!")
@@ -109,8 +143,94 @@ def playerOneSelection(column):
 
 
 
+def insert_chip(board, column, chip):
+
+    for row in range(len(board) -1, -1, -1):
+        if board[row][column] == ".":
+            board[row][column] = chip
+            return board, row
+    return board
+
+
+
+
+def check_horizontal(board, chip, row):
+    consecutive_count = 0
+    for col in range(len(board[row])):
+        if board[row][col] == chip:
+            consecutive_count += 1
+            if consecutive_count == 4:
+                return True
+        else:
+            consecutive_count = 0
+    return False
+
+
+def check_vertical(board, chip, column):
+    consecutive_count = 0
+    for row in range(len(board)):
+        if board[row][column] == chip:
+            consecutive_count += 1
+            if consecutive_count == 4:
+                return True
+        else:
+            consecutive_count = 0
+    return False
+
+
+def check_diagonal_up(board, chip, row, column):
+    consecutive_count = 0
+    for i in range(min(row, column, len(board[row]) - column - 1) + 1):
+        if board[row - i][column - i] == chip:
+            consecutive_count += 1
+            if consecutive_count == 4:
+                return True
+        else:
+            consecutive_count = 0
+    return False
+
+
+def check_diagonal_down(board, chip, row, column):
+    consecutive_count = 0
+    for i in range(min(len(board) - row - 1, column, len(board[row]) - column - 1) + 1):
+        if board[row + i][column - i] == chip:
+            consecutive_count += 1
+            if consecutive_count == 4:
+                return True
+        else:
+            consecutive_count = 0
+    return False
+
+
+def is_win_state(chip, board, row, column):
+    if check_horizontal(board, chip, row):
+        return True
+
+    if check_vertical(board, chip, column):
+        return True
+
+    if check_diagonal_up(board, chip, row, column):
+        return True
+
+    if check_diagonal_down(board, chip, row, column):
+        return True
+
+    return False
+
+def is_board_full(board):
+    returnValue = False
+    counter = 0
+    for j in range(len(board)):
+        if (board[0][j] != "."):
+            counter += 1
+    if counter == 4:
+        returnValue = True
+
+    return False
+
+
 def main():
-    checker = True
+    checker = False
 
     print("Welcome to Find Four!")
     print("---------------------")
@@ -125,11 +245,46 @@ def main():
     print("Player 2: o")
     print()
 
-    while checker:
-        playerOneSelection(width)
+    playerOneChip = "x"
+    playertwoChip = "o"
+
+    while checker != True:
+        choiceOfOne = playerOneSelection(width)
+        print()
+        board, PlayerOneRow = insert_chip(board, choiceOfOne, playerOneChip)
+        print_board(board, width, height)
+        print()
+
+        checker = is_win_state(playerOneChip, board, PlayerOneRow, choiceOfOne )
+
+        if checker == True:
+            print()
+            print("Player 1 won the game!")
+            quit()
+
+        checker = is_board_full(board)
+        if checker == True:
+            print()
+            print("Draw game! Players tied.")
+            quit()
+
+        choiceOfTwo = playerTwoSelection(width)
+        board, row = insert_chip(board, choiceOfTwo, playertwoChip)
+        print_board(board, width, height)
+
+        checker = is_win_state(playerOneChip, board, PlayerOneRow, choiceOfTwo )
+        if checker == True:
+            print()
+            print("Player 2 won the game!")
+            quit()
+
+        checker = is_board_full(board)
+        if checker == True:
+            print()
+            print("Draw game! Players tied.")
+            quit()
 
 
-        checker = False
 
 
 if __name__ == '__main__':
