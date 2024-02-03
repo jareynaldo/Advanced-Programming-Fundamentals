@@ -8,6 +8,9 @@ def main():
     workingSet = stringdata.get_data()
 
 
+    #will take the time, look for the term, and then end the time
+    #then prints through it
+
     startTime = time.time()
     searchOutcome = binary_search(workingSet,"not_here")
     endTime = time.time()
@@ -54,6 +57,7 @@ def main():
 
 
 def lookingForTerm(term, result):
+    # to format the output of wether the term was found or not
     if result == -1:
         print(term + " Not found")
     else:
@@ -61,9 +65,12 @@ def lookingForTerm(term, result):
     print()
 
 def printSearches(searchType, term, endTime, startTime):
+    # to format output of searches
     print(searchType + " search for '" + term + "' took " + str(endTime - startTime) + " seconds")
 
 def binary_search(container, element):
+
+    #does a binary search
     maxValue = len(container) - 1
     minValue = 0
 
@@ -81,6 +88,7 @@ def binary_search(container, element):
 
 
 def linear_search(container, element):
+    #does linear search
     for i in range(len(container)):
         if(container[i] == element):
             return i
