@@ -50,13 +50,13 @@ def to_hex_string(data_in):
     return "".join(data_out)
 
 def to_hex_string_single_val(data_in):
-    data_out = ""
+
     values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g"]
 
     for i in range(16):
-        if data_in == i:
-            data_out = str(values[i])
-    return data_out
+        if str(data_in) == str(i):
+            data_in = str(values[i])
+    return data_in
 
 
 
@@ -84,16 +84,80 @@ def encode_rle(data_in):
                 last_char = None
 
         append_string = r"\x0" + to_hex_string_single_val(how_many_instances)
-        data_out.append( append_string)
+        data_out.append(append_string)
 
         append_string = r"\x0" + to_hex_string_single_val(data_in[counter - 1])
         data_out.append(append_string)
         how_many_instances = 0
         last_char = data_in[counter]
 
-
     return "".join(data_out)
 
+def get_undecoded_length(data_in):
+    data_out = 0
+    for i in range(len(data_in)):
+        if i % 2 == 0:
+            data_out += data_in[i]
+    return data_out
+
+def decode_rle(data_in):
+    data_out = ["b'"]
+    for i in range(len(data_in)):
+        if i % 2 == 0:
+            for j in range(data_in[i]):
+                to_append = "\\x0"  + str(to_hex_string_single_val(data_in[i+1 ]))
+                data_out.append(to_append)
+
+    data_out.append("'")
+    return "".join(data_out)
+
+def string_to_data(data_in):
+    data_out = ["b'"]
+    split = [*data_in]
+
+    for i in range(len(split)):
+        append = "\\0" + split[i]
+        data_out.append(append)
+
+    data_out.append("'")
+    return "".join(data_out)
+
+def to_rle_string(data_in):
+    data_out = []
+    for i in range(len(data_in)):
+        if i % 2 == 0:
+           data_out.append(str(data_in[i]))
+        else:
+            append = to_hex_string_single_val(data_in[i])
+            if i != len(data_in) - 1:
+                append= append + ":"
+            data_out.append(append)
+    return "".join(data_out)
+
+def string_to_rle(data_in):
+    data_out = [*data_in]
+    counter = []
+    j = 0
+    for i, value in enumerate(data_out):
+
+        if value == ":":
+            #gets all the elements prior to the hex value
+            #and stores them in counter
+            for k in range(i - 1):
+                counter.append(data_out[k])
+            data_out.pop(i)
+            data_out.pop(j)
+            data_out[j] = "".join(counter)
+            j = i
+            i -= 1
+
+
+    #changes every value to hex
+    for z in range(len(data_out)):
+        bruh = data_out[z]
+        data_out[z] = to_hex_string_single_val(bruh)
+
+    return "b'\\x0" + "\\x0".join(data_out) + "'"
 
 
 
@@ -105,9 +169,7 @@ def main():
     image_data = [16, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     console_gfx.display_image(image_data)
 
-    current_data = []
-
-    print(encode_rle([15,15,15,4,4,4,8,8,8,8,4,4,4]))
+    current_data = None
     print()
 
     checker = True
@@ -129,15 +191,39 @@ def main():
             current_data = console_gfx.load_file(file_name)
 
         elif int(user_choice) == 2:
-            image_data = console_gfx.TEST_IMAGE
+            current_data = console_gfx.TEST_IMAGE
             print("Test image data loaded.")
 
         elif int(user_choice) == 3:
             print("Enter an RLE string to be decoded: ", end="")
-            undecoded_str = re.split(":", input() )
+            undecoded_str = input()
 
-            print(undecoded_str)
+            current_data = string_to_rle(undecoded_str)
 
+        elif int(user_choice) == 4:
+            print("Enter the hex string holding RLE data: ", end="")
+            undecoded_str = input()
+            current_data = string_to_data(undecoded_str)
+            print("RLE decoded length: " + str(len(undecoded_str)))
+
+        elif int(user_choice) == 5:
+            print("Enter the hex string holding flat data: ", end="")
+            undecoded_str = input()
+            current_data = undecoded_str
+
+        elif int(user_choice) == 6:
+            print("Displaying image...")
+            if current_data == None:
+                print("(no data)")
+            else:
+                console_gfx.display_image(current_data)
+
+        elif int(user_choice) == 7:
+            print("RLE representation:")
+        elif int(user_choice) == 8:
+            print("RLE hex values:")
+        elif int(user_choice) == 9:
+            print("Flat hex values:")
 
 
 
