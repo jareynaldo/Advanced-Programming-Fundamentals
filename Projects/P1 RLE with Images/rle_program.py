@@ -141,29 +141,23 @@ def to_rle_string(rleData):
 
 
 def string_to_rle(data_in):
+    split_data = data_in.split(":")
+    data_out = []
+    for i in range(len(split_data)):
+        current_value = split_data[i]
+        current_value = [*current_value]
+        run_length_str, hex_val = current_value[:-1], current_value[-1]
 
+        run_length = int("".join(run_length_str))
+        int_val = int(hex_val, 16)
 
-    data_out = [*data_in]
-    counter = []
-    j = 0
-    for i, value in enumerate(data_out):
+        print(run_length)
+        print(int_val)
+        data_out.append(run_length)
+        data_out.append(int_val)
 
-        if value == ":":
-
-            for k in range(i - 1):
-                counter.append(data_out[k])
-            data_out.pop(i)
-            data_out.pop(j)
-            data_out[j] ="".join(counter)
-            j = i
-            i -= 1
-
-    for z in range(len(data_out)):
-        bruh = data_out[z]
-        data_out[z] = to_hex_string_single_val(bruh)
-
-    return "b'\\x0" + "\\x0".join(data_out) + "'"
-
+    print(data_out)
+    return repr(bytes(data_out))
 
 
 
@@ -177,6 +171,7 @@ def main():
     current_data = None
     print()
 
+    print(string_to_rle("10f:64"))
 
 
     checker = True
@@ -211,6 +206,7 @@ def main():
 
         elif int(user_choice) == 4:
 
+            #done
             print("Enter the hex string holding RLE data: ", end="")
             undecoded_str = input().lower()
 
@@ -223,14 +219,19 @@ def main():
 
             print("RLE decoded length: " + str(counter))
             current_data = list(decode_rle(undecoded_str))
-            print(current_data)
-
 
 
         elif int(user_choice) == 5:
+
+            #done
             print("Enter the hex string holding flat data: ", end="")
             undecoded_str = input()
-            current_data = undecoded_str
+            number_runs = count_runs(undecoded_str)
+            print("Nimber of runs: " + str(number_runs))
+
+            current_data = list(string_to_data(undecoded_str))
+
+
 
         elif int(user_choice) == 6:
             print("Displaying image...")
@@ -240,7 +241,13 @@ def main():
                 console_gfx.display_image(current_data)
 
         elif int(user_choice) == 7:
+
             print("RLE representation:")
+            undecoded_str = decode_rle(undecoded_str)
+            current_data = list(undecoded_str)
+            print(current_data)
+
+
         elif int(user_choice) == 8:
             print("RLE hex values:")
         elif int(user_choice) == 9:
