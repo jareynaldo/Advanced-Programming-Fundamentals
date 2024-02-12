@@ -177,7 +177,6 @@ def main():
     current_data = None
     print()
 
-    print(string_to_rle("10f:64"))
 
 
     checker = True
@@ -200,6 +199,7 @@ def main():
 
         elif int(user_choice) == 2:
             current_data = console_gfx.TEST_IMAGE
+            print(current_data)
             print("Test image data loaded.")
 
         elif int(user_choice) == 3:
@@ -212,9 +212,20 @@ def main():
         elif int(user_choice) == 4:
 
             print("Enter the hex string holding RLE data: ", end="")
-            undecoded_str = input()
-            current_data = string_to_data(undecoded_str)
-            print("RLE decoded length: " + str(len(undecoded_str)))
+            undecoded_str = input().lower()
+
+            undecoded_str = string_to_data(undecoded_str)
+            undecoded_str = list(undecoded_str)
+            counter = 0
+            for i in range(len(undecoded_str)):
+                if i % 2 == 0:
+                    counter += undecoded_str[i]
+
+            print("RLE decoded length: " + str(counter))
+            current_data = list(decode_rle(undecoded_str))
+            print(current_data)
+
+
 
         elif int(user_choice) == 5:
             print("Enter the hex string holding flat data: ", end="")
