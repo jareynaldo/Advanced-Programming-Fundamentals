@@ -30,6 +30,9 @@ def user_input_checker(user_input):
     return 1
 
 def count_runs(flatData):
+
+
+    #works great
     prev = 45
     counter = 0
     for i in range(len(flatData)):
@@ -41,6 +44,8 @@ def count_runs(flatData):
 
 
 def to_hex_string(data_in):
+
+    #works great
     data_out = []
     values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g"]
     for counter in range(len(data_in)):
@@ -52,7 +57,6 @@ def to_hex_string(data_in):
 def to_hex_string_single_val(data_in):
 
     values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g"]
-
     for i in range(16):
         if str(data_in) == str(i):
             data_in = str(values[i])
@@ -60,40 +64,35 @@ def to_hex_string_single_val(data_in):
 
 
 
-def encode_rle(data_in):
-    data_out = ["b'"]
-    runs = count_runs(data_in)
+def string_to_rle(rleString):
+    data_out = list(rleString)
+    counter = []
+    j = 0
 
+    for i, value in enumerate(data_out):
+        if value == ":":
+            # Get all the elements prior to the hex value
+            # and store them in counter
+            for k in range(i - 1, j, -1):
+                counter.insert(0, data_out.pop(k))
 
-    how_many_instances = 0
-    last_char = data_in[0]
-    counter = 0
-    # for however many indivdual character sequences you have (runs)
-    # the program will loop through them, adding one to the how_many_instances
-    # var until they no longer equal each other. Then the instances will be uploaded
-    # to the data_out list and the actual value will be converted to hex
-    for i in range(runs):
+            data_out[j] = int("".join(counter), 10)
+            j = i + 1
+            counter = []
 
-        while data_in[counter] == last_char:
+    # Convert every run value to hex
+    for z in range(len(data_out)):
+        if isinstance(data_out[z], int):
+            data_out[z] = to_hex_string_single_val(data_out[z])
 
-            how_many_instances += 1
-            counter += 1
-            last_char = data_in[counter - 1]
-            if counter == len(data_in):
-                counter -= 1
-                last_char = None
+    # Join the hex values and create a bytes object
+    bytes_literal = bytes(data_out)
+    return bytes_literal
 
-        append_string = r"\x0" + to_hex_string_single_val(how_many_instances)
-        data_out.append(append_string)
-
-        append_string = r"\x0" + to_hex_string_single_val(data_in[counter - 1])
-        data_out.append(append_string)
-        how_many_instances = 0
-        last_char = data_in[counter]
-
-    return "".join(data_out)
 
 def get_undecoded_length(data_in):
+
+    #works great
     data_out = 0
     for i in range(len(data_in)):
         if i % 2 == 0:
@@ -101,58 +100,64 @@ def get_undecoded_length(data_in):
     return data_out
 
 def decode_rle(data_in):
-    data_out = ["b'"]
-    for i in range(len(data_in)):
-        if i % 2 == 0:
-            for j in range(data_in[i]):
-                to_append = "\\x0"  + str(to_hex_string_single_val(data_in[i+1 ]))
-                data_out.append(to_append)
-
-    data_out.append("'")
-    return "".join(data_out)
-
-def string_to_data(data_in):
-    data_out = ["b'"]
-    split = [*data_in]
-
-    for i in range(len(split)):
-        append = "\\0" + split[i]
-        data_out.append(append)
-
-    data_out.append("'")
-    return "".join(data_out)
-
-def to_rle_string(data_in):
+    #works great
     data_out = []
     for i in range(len(data_in)):
         if i % 2 == 0:
-           data_out.append(str(data_in[i]))
-        else:
-            append = to_hex_string_single_val(data_in[i])
-            if i != len(data_in) - 1:
-                append= append + ":"
-            data_out.append(append)
+            for j in range(data_in[i]):
+                data_out.append(data_in[i+1])
+
+
+    return bytes(data_out)
+
+def string_to_data(data_in):
+
+    #works great
+    data_out = []
+    split = [*data_in]
+    values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f", "g"]
+    for counter in range(len(split)):
+        for i in range(16):
+            if split[counter] == str(values[i]):
+                data_out.append(i)
+    return bytes(data_out)
+
+
+def to_rle_string(rleData):
+    #works great
+    data_out = []
+    for i in range(0, len(rleData), 2):
+        run_length = str(rleData[i])
+        run_value_hex = to_hex_string_single_val(rleData[i + 1])
+
+        run_str = f"{run_length}{run_value_hex}"
+
+        if i != len(rleData) - 2:
+            run_str += ":"
+
+        data_out.append(run_str)
+
     return "".join(data_out)
 
+
 def string_to_rle(data_in):
+
+
     data_out = [*data_in]
     counter = []
     j = 0
     for i, value in enumerate(data_out):
 
         if value == ":":
-            #gets all the elements prior to the hex value
-            #and stores them in counter
+
             for k in range(i - 1):
                 counter.append(data_out[k])
             data_out.pop(i)
             data_out.pop(j)
-            data_out[j] = "".join(counter)
+            data_out[j] ="".join(counter)
             j = i
             i -= 1
 
-
-    #changes every value to hex
     for z in range(len(data_out)):
         bruh = data_out[z]
         data_out[z] = to_hex_string_single_val(bruh)
@@ -171,6 +176,9 @@ def main():
 
     current_data = None
     print()
+
+    print(string_to_rle("10f:64"))
+
 
     checker = True
     while checker:
@@ -195,12 +203,14 @@ def main():
             print("Test image data loaded.")
 
         elif int(user_choice) == 3:
+            #done
             print("Enter an RLE string to be decoded: ", end="")
             undecoded_str = input()
 
             current_data = string_to_rle(undecoded_str)
 
         elif int(user_choice) == 4:
+
             print("Enter the hex string holding RLE data: ", end="")
             undecoded_str = input()
             current_data = string_to_data(undecoded_str)
