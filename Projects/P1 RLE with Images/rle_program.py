@@ -35,7 +35,6 @@ def count_runs(data_in):
     #and if there's a hex value multiple total by 2
     prev = data_in[0]
     counter = 1  # Start with 1 to count the first run
-    multiple = 1
 
     for i in range(1, len(data_in)):
         if isinstance(data_in[i], str):
@@ -44,7 +43,7 @@ def count_runs(data_in):
             counter += 1
         prev = data_in[i]
 
-    return counter * multiple
+    return counter
 
 
 def to_hex_string(data_in):
