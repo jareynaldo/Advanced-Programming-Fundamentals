@@ -1,99 +1,56 @@
-# Jose Reynaldo and Marie Klinzing
-
+# Jose Reynaldo and Marie Klinizing
 import stringdata
 import time
 
-
 def main():
-    workingSet = stringdata.get_data()
+    cont = stringdata.get_data() #pull data from stringdata.py
+    checks=["not_here", "mzzzz","aaaaa"] #create list for checks
 
+    for i in range(len(checks)): #iterates through check list
+        start=time.time() #print out the info from the linear search
 
-    #will take the time, look for the term, and then end the time
-    #then prints through it
+        print("Testing Linear Search for:", checks[i])
+        index=linear_search(cont, checks[i])
+        end=time.time()-start
 
-    startTime = time.time()
-    searchOutcome = binary_search(workingSet,"not_here")
-    endTime = time.time()
-    printSearches("Binary", "not_here", endTime, startTime)
-    lookingForTerm("not_here", searchOutcome)
-
-
-    startTime = time.time()
-    searchOutcome = linear_search(workingSet, "not_here")
-    endTime = time.time()
-    printSearches("Linear", "not_here", endTime, startTime)
-    lookingForTerm("not_here", searchOutcome)
-
-    startTime = time.time()
-    searchOutcome = binary_search(workingSet,"mzzzz")
-    endTime = time.time()
-    printSearches("Binary", "mzzzz", endTime, startTime)
-    lookingForTerm("mzzzz", searchOutcome)
-
-
-    startTime = time.time()
-    searchOutcome = linear_search(workingSet, "mzzzz")
-    endTime = time.time()
-    printSearches("Linear", "mzzzz", endTime, startTime)
-    lookingForTerm("mzzzz", searchOutcome)
-
-    startTime = time.time()
-    searchOutcome = binary_search(workingSet, "aaaaa")
-    endTime = time.time()
-    printSearches("Binary", "aaaaa", endTime, startTime)
-    lookingForTerm("aaaaa", searchOutcome)
-
-    startTime = time.time()
-    searchOutcome = linear_search(workingSet, "aaaaa")
-    endTime = time.time()
-    printSearches("Linear", "aaaaa", endTime, startTime)
-    lookingForTerm("aaaaa", searchOutcome)
-
-
-
-
-
-
-
-
-def lookingForTerm(term, result):
-    # to format the output of wether the term was found or not
-    if result == -1:
-        print(term + " Not found")
-    else:
-        print(term + " was found in spot " + str(result))
-    print()
-
-def printSearches(searchType, term, endTime, startTime):
-    # to format output of searches
-    print(searchType + " search for '" + term + "' took " + str(endTime - startTime) + " seconds")
-
-def binary_search(container, element):
-
-    #does a binary search
-    maxValue = len(container) - 1
-    minValue = 0
-
-    while minValue <= maxValue:
-        midIndex = minValue + (maxValue - minValue) // 2  # Use integer division to ensure midIndex is an integer
-
-        if container[midIndex] == element:
-            return midIndex
-        elif container[midIndex] < element:
-            minValue = midIndex + 1
+        if index==-1:
+            print(checks[i], "not found")
         else:
-            maxValue = midIndex - 1
+            print(checks[i], "found at", index)
+        print("Linear Search Time:", end, "\n")
 
+
+        start = time.time() #print out the checks for the binary search
+        print("Testing Binary Search for:", checks[i])
+
+        index = binary_search(cont, checks[i])
+        end = time.time() - start
+
+
+        if index == -1:
+            print(checks[i], "not found")
+        else:
+            print(checks[i], "found at", index)
+        print("Binary Search Time: ", end, "\n")
+
+def linear_search(container, element) -> int:
+    for i, val in enumerate(container): #checks each element
+        if val==element:
+            return i
     return -1
 
+def binary_search(container, element) -> int:
+    min=0 #define min, max, mid
+    max=len(container)-1
+    while min <= max:
+        mid = min + (max - min) // 2
+        if element<container[mid]: #if not equal to mid, redefine max or min
+            max=mid-1
+        elif element>container[mid]:
+            min=mid+1
+        else:
+            return mid
+    return -1
 
-def linear_search(container, element):
-    #does linear search
-    for i in range(len(container)):
-        if(container[i] == element):
-            return i
-
-    return -1;
-
-if __name__ == "__main__":
-    main()
+if __name__=="__main__":
+    main() #call main
