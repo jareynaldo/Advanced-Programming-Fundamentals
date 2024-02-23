@@ -1,0 +1,16 @@
+# ninja log v5
+3	242	7304215990502796	build.ninja	e7ed60061110f4ed
+6	160	7304215993476225	CMakeFiles/06_Image_Scaling.dir/scaler.cpp.obj	f13e3ace433296
+12	532	7304215997190248	CMakeFiles/06_Image_Scaling.dir/Image.cpp.obj	370504e32042053
+0	671	7304215998575763	CMakeFiles/06_Image_Scaling.dir/ConsoleGfx.cpp.obj	59cff6cdae2b9bda
+671	911	7304216000917054	06_Image_Scaling.exe	40dd5c2ab4d0663d
+4	587	7304226424942157	CMakeFiles/06_Image_Scaling.dir/Image.cpp.obj	370504e32042053
+3	509	7304226986139053	CMakeFiles/06_Image_Scaling.dir/Image.cpp.obj	370504e32042053
+4	565	7304229474416539	CMakeFiles/06_Image_Scaling.dir/Image.cpp.obj	370504e32042053
+5	438	7304230420598928	CMakeFiles/06_Image_Scaling.dir/Image.cpp.obj	370504e32042053
+5	628	7304238806733553	CMakeFiles/06_Image_Scaling.dir/Image.cpp.obj	370504e32042053
+629	771	7304238808128787	06_Image_Scaling.exe	40dd5c2ab4d0663d
+5	508	7304239423207934	CMakeFiles/06_Image_Scaling.dir/Image.cpp.obj	370504e32042053
+509	616	7304239424236277	06_Image_Scaling.exe	40dd5c2ab4d0663d
+4	480	7304249193396073	CMakeFiles/06_Image_Scaling.dir/Image.cpp.obj	370504e32042053
+481	847	7304249197006828	06_Image_Scaling.exe	40dd5c2ab4d0663d
