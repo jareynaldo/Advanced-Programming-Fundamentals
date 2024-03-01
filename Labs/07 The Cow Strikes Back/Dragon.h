@@ -1,8 +1,14 @@
 //
-// Created by jreyn on 3/1/2024.
+// Created by Karan Faldu on 3/1/24.
 //
+#pragma once
 
-#ifndef INC_07_THE_COW_STRIKES_BACK_DRAGON_H
-#define INC_07_THE_COW_STRIKES_BACK_DRAGON_H
+#include "Cow.h"
+class Dragon: public Cow
+{
+public:
+    Dragon(string _name, string _image);
 
-#endif //INC_07_THE_COW_STRIKES_BACK_DRAGON_H
+    bool canBreatheFire();
+};
+

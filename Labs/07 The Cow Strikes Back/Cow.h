@@ -1,8 +1,24 @@
 //
-// Created by jreyn on 3/1/2024.
+// Created by Karan Faldu on 3/1/24.
 //
 
-#ifndef INC_07_THE_COW_STRIKES_BACK_COW_H
-#define INC_07_THE_COW_STRIKES_BACK_COW_H
+#pragma once
 
-#endif //INC_07_THE_COW_STRIKES_BACK_COW_H
+#include <string>
+using namespace std;
+
+class Cow
+{
+    string name;
+    string image;
+
+public:
+    Cow(string _name);
+
+    string& getName();
+
+    string& getImage();
+
+    virtual void setImage(string _image);
+
+};

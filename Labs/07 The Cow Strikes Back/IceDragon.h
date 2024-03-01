@@ -1,8 +1,14 @@
 //
-// Created by jreyn on 3/1/2024.
+// Created by Karan Faldu on 3/1/24.
 //
+#pragma once
 
-#ifndef INC_07_THE_COW_STRIKES_BACK_ICEDRAGON_H
-#define INC_07_THE_COW_STRIKES_BACK_ICEDRAGON_H
 
-#endif //INC_07_THE_COW_STRIKES_BACK_ICEDRAGON_H
+#include "Dragon.h"
+
+class IceDragon: public Dragon
+{
+public:
+    IceDragon(string _name, string _image);
+    bool canBreatheFire();
+};
