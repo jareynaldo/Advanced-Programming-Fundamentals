@@ -1,14 +1,28 @@
 //
-// Created by jreyn on 2/23/2024.
+// Created by brandon and jose
 //
+#ifndef LAB_6_IMAGE_H
+#define LAB_6_IMAGE_H
 
-#ifndef INC_06_IMAGE_SCALING_IMAGE_H
-#define INC_06_IMAGE_SCALING_IMAGE_H
+#endif //LAB_6_IMAGE_H
 
+//Image class that initializes methods and attributes
+class Image{
+public:
+    Image(unsigned char *imageData);
 
-class image {
+    unsigned char *getImageData();
+
+    unsigned char *getPixelData();
+
+    unsigned char getWidth();
+
+    unsigned char getHeight();
+
+    void setImageData(unsigned char *newData);
+
+private:
+    unsigned char *image_data;
 
 };
 
-
-#endif //INC_06_IMAGE_SCALING_IMAGE_H

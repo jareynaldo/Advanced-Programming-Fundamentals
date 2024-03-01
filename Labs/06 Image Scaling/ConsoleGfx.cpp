@@ -97,6 +97,7 @@ void ConsoleGfx::displayImage(unsigned char *imageData)
 
 unsigned char *ConsoleGfx::loadFile(string filename)
 {
+
 	ifstream inFile;
 	char *buffer = nullptr;
 	
