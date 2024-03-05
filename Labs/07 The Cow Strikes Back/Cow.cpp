@@ -1,5 +1,5 @@
 //
-// Created by Karan Faldu on 3/1/24.
+// Created by Karan Faldu and Jose Reynaldo
 //
 #include "Cow.h"
     //Constructs a Cow object
