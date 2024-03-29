@@ -1,9 +1,9 @@
-# By Jose Reynaldo, March 18th, 2024
+# by Jose Reynaldo on 16/3/24
 
 
 import math
 
-class pakuri:
+class Pakuri:
 
     def __init__(self, species: str, level: int):
 
@@ -12,7 +12,7 @@ class pakuri:
         self._attack = (len(species) * 7 + 11) % 16
         self._defense = (len(species) * 5 + 17) % 16
         self._stamina = (len(species) * 6 + 13) % 16
-        self._cp = math.floor(self._attack * math.sqrt(self._defense) *math.sqrt(self._stamina) * level * .08)
+        self._cp = math.floor(self._attack * math.sqrt(self._defense) * math.sqrt(self._stamina) * level * .08)
         self._hp = math.floor(self._stamina * level / 6)
 
     def get_species(self):
@@ -37,7 +37,7 @@ class pakuri:
 
     @property
     def hp(self):
-        math.floor(self._stamina * self._level / 6)
+        self._hp = math.floor(self._stamina * self._level / 6)
         return self._hp
 
     @property
