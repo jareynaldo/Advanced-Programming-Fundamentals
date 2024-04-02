@@ -1,0 +1,10 @@
+# ninja log v5
+27	630	7333809785945343	CMakeFiles/08_The_return_of_the_cow.dir/Cow.cpp.obj	56835810b103effd
+14	584	7333809785320304	CMakeFiles/08_The_return_of_the_cow.dir/IceDragon.cpp.obj	1dc4917c2cc96ebc
+10	583	7333809785015913	CMakeFiles/08_The_return_of_the_cow.dir/Dragon.cpp.obj	25b6b39bc3a4f2e6
+1195	1357	7333815607938884	08_The_return_of_the_cow.exe	eeef7384d5c08a15
+19	796	7333809787739031	CMakeFiles/08_The_return_of_the_cow.dir/FileCow.cpp.obj	f21fcf34e7349bed
+4	1122	7333815056891468	CMakeFiles/08_The_return_of_the_cow.dir/cowsay.cpp.obj	306b02bf3b19756a
+1	269	7333820726402876	build.ninja	b8e518bdcf6641d6
+7	1194	7333815606354010	CMakeFiles/08_The_return_of_the_cow.dir/HeiferGenerator.cpp.obj	c09e12aac86d9606
+0	223	7333820726402876	build.ninja	b8e518bdcf6641d6

@@ -1,0 +1,3 @@
+C:/University of Florida/Spring 24/COP3504/Labs/08 The return of the cow/cmake-build-debug/CMakeFiles/08_The_return_of_the_cow.dir
+C:/University of Florida/Spring 24/COP3504/Labs/08 The return of the cow/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/University of Florida/Spring 24/COP3504/Labs/08 The return of the cow/cmake-build-debug/CMakeFiles/rebuild_cache.dir
