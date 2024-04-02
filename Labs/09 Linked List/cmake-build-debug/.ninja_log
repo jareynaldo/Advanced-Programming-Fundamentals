@@ -1,2 +1,6 @@
 # ninja log v5
 1	3834	7334415030061557	CMakeFiles/LinkedList.dir/nvwa/debug_new.cpp.obj	cce8ff249ddcb2c
+3	742	7337938362570695	CMakeFiles/LinkedList.dir/main.cpp.obj	e21a1f650c011643
+743	1172	7337938366803673	LinkedList.exe	231ac3a6ed0823db
+5	674	7337942084221016	CMakeFiles/LinkedList.dir/main.cpp.obj	e21a1f650c011643
+674	816	7337942085599772	LinkedList.exe	231ac3a6ed0823db
