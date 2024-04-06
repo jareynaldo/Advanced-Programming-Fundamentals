@@ -1,4 +1,0 @@
-C:/University of Florida/Spring 24/COP3504/Labs/10 Meme Generator/memeify/cmake-build-debug/CMakeFiles/memer.dir
-C:/University of Florida/Spring 24/COP3504/Labs/10 Meme Generator/memeify/cmake-build-debug/CMakeFiles/memeify.dir
-C:/University of Florida/Spring 24/COP3504/Labs/10 Meme Generator/memeify/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/University of Florida/Spring 24/COP3504/Labs/10 Meme Generator/memeify/cmake-build-debug/CMakeFiles/rebuild_cache.dir

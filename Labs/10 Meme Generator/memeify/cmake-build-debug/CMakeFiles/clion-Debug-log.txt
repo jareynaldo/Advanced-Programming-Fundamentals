@@ -1,5 +1,0 @@
-"C:\Program Files (x86)\JetBrains\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files (x86)/JetBrains/CLion 2023.3.2/bin/ninja/win/x64/ninja.exe" -G Ninja -S "C:\University of Florida\Spring 24\COP3504\Labs\10 Meme Generator\memeify" -B "C:\University of Florida\Spring 24\COP3504\Labs\10 Meme Generator\memeify\cmake-build-debug"
--- Found SFML 2.5.1 in C:/Libraries/SFML-2.5.1/lib/cmake/SFML
--- Configuring done (1.3s)
--- Generating done (0.1s)
--- Build files have been written to: C:/University of Florida/Spring 24/COP3504/Labs/10 Meme Generator/memeify/cmake-build-debug

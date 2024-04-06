@@ -6,9 +6,6 @@
 #define MEMEIFY_MEMEIFY_H
 
 
-class memeify {
-
-};
 
 
 #endif //MEMEIFY_MEMEIFY_H

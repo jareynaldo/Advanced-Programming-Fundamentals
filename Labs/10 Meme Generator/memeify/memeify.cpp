@@ -9,14 +9,13 @@ using namespace sf;
 int main(int argc, char* argv[]) {
 
 
-    cout << "hello there" << endl;
-    // Check for minimum number of arguments
+   cout << "hello there" << endl;
+
     if (argc < 2) {
-        cerr << "Usage: " << argv[0] << " <image_file> <top_text> [bottom_text] [top_x] [top_y] [bottom_x] [bottom_y]" << endl;
+        cerr << "need more than 2 arguments" << endl;
         return 1;
     }
 
-    // Parse arguments
     string imageFilePath = argv[1];
     String topText = argv[2];
     String bottomText = argc > 3 ? argv[3] : "";
@@ -52,10 +51,7 @@ int main(int argc, char* argv[]) {
 
     // Save the new meme image
     string newFileName = imageFilePath.substr(0, imageFilePath.find_last_of('.')) + "-meme" + imageFilePath.substr(imageFilePath.find_last_of('.'));
-    if (!memeImage.saveToFile(newFileName)) {
-        cerr << "Failed to save meme image: " << newFileName << endl;
-        return 1;
-    }
+    memeImage.saveToFile(newFileName);
 
     cout << "Meme saved as: " << newFileName << endl;
     return 0;
