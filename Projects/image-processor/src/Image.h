@@ -27,7 +27,7 @@ using namespace std;
         void scaleRedChannel();
         void clear();
         void seperateValues(Image& a, Image& b, Image& c);
-        void combineValues(Image& green, Image& red);
+        void combineValues(const Image& green, const Image& red);
 
         unsigned char multiplyPixels(unsigned char a, unsigned char b) {
 

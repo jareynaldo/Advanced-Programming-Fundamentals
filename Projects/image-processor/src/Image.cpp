@@ -73,13 +73,22 @@ void Image::seperateValues(Image& a, Image& b, Image& c){
     for (size_t i = 0; i < this->pixels.size(); i += 3) {
 
         a.pixels[i] = this->pixels[i];
+        a.pixels[i + 1] = this->pixels[i];
+        a.pixels[i + 2] = this->pixels[i];
+
+        b.pixels[i] = this->pixels[i +1];
         b.pixels[i + 1] = this->pixels[i + 1];
+        b.pixels[i + 2] = this->pixels[i +1];
+
+        c.pixels[i] = this->pixels[i + 2];
+        c.pixels[i + 1] = this->pixels[i + 2];
         c.pixels[i + 2] = this->pixels[i + 2];
     }
 }
 
-void Image::combineValues(Image& green, Image& red){
+void Image::combineValues(const Image& green, const Image& red){
     for (size_t i = 0; i < this->pixels.size(); i += 3) {
-        return;
+        this->pixels[i+ 1] = green.pixels[i + 1];
+        this->pixels[i+2] = red.pixels[i+2];
     }
 }

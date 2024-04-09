@@ -25,11 +25,8 @@ bool readTGA(const string& fileName, TGAHeader& header, vector<unsigned char>& i
     // Read the header
     file.read(reinterpret_cast<char*>(&header), sizeof(TGAHeader));
     // reinterpret_cast will change the pointer type to header type
-
-
     // Calculate the size of the image data in bytes
     int imageSize = header.width * header.height * (header.bitsPerPixel / 8);
-
     // Resize the vector to fit
     imageData.resize(imageSize);
     file.read(reinterpret_cast<char*>(imageData.data()), imageSize);
@@ -111,7 +108,9 @@ void executeOperation(const string& shortInFileName, const string& shortOutFileN
         writeTGA("../output/part8_g.tga", _g.header, _g.pixels);
         writeTGA("../output/part8_b.tga", _b.header, _b.pixels);
     }else if(part == "part9"){
-
+        Image red;
+        readTGA("../input/layer_red.tga", red.header, red.pixels);
+        inputImage.combineValues(otherImage, red);
     }
 
     string outputFilename = "../output/" + part + ".tga";
@@ -121,20 +120,51 @@ void executeOperation(const string& shortInFileName, const string& shortOutFileN
     }
 
 }
+void test(const string &outputFileName, const string &exampleFileName, const int &testNumber){
+    Image output;
+    readTGA(outputFileName, output.header, output.pixels);
 
+    Image example;
+    readTGA(outputFileName, example.header, example.pixels);
+    bool checker = true;
+
+    for(int i = 0; i < output.pixels.size(); i++){
+        if(output.pixels[i] != example.pixels[i]){
+            checker = false;
+        }
+    }
+    if(checker){
+        cout << "Test For file " << outputFileName << "....Passed!" << endl;
+    } else{
+        cout << "Test For file " << outputFileName << " ....Failed" <<endl;
+
+    }
+
+}
+void testExecute(){
+    vector<string> output = {"part2.tga", "part3.tga", "part4.tga", "part5.tga", "part6.tga", "part7.tga", "part8_r.tga", "part8_g.tga", "part8_b.tga", "part9.tga"};
+    vector<string> example = output;
+    for(int i  = 0; i < output.size(); i++){
+        output.at(i) = "../output/" +  output.at(i);
+        example.at(i) = "../examples/EXAMPLE_" +  output.at(i);
+        test(output.at(i), example.at(i), i + 1);
+    }
+
+}
 
 int main() {
 
-    executeOperation("layer1.tga", "pattern1.tga", "part1");
-    executeOperation("car.tga", "layer2.tga", "part2");
-    executeOperation("layer1.tga", "pattern2.tga", "part3");
-    executeOperation("layer2.tga", "circles.tga", "part4");
-    executeOperation( "pattern1.tga", "layer1.tga", "part5");
-    executeOperation( "car.tga", "pattern1.tga", "part6");
-    executeOperation("car.tga", "car.tga", "part7");
-    executeOperation("car.tga", "car.tga", "part8");
-    executeOperation("layer_red.tga", "layer_blue.tga", "part9");
-
+    testExecute();
+//    executeOperation("layer1.tga", "pattern1.tga", "part1");
+//    executeOperation("car.tga", "layer2.tga", "part2");
+//    executeOperation("layer1.tga", "pattern2.tga", "part3");
+//    executeOperation("layer2.tga", "circles.tga", "part4");
+//    executeOperation( "pattern1.tga", "layer1.tga", "part5");
+//    executeOperation( "car.tga", "pattern1.tga", "part6");
+//    executeOperation("car.tga", "car.tga", "part7");
+//    executeOperation("car.tga", "car.tga", "part8");
+//    executeOperation("layer_blue.tga", "layer_green.tga", "part9");
+//
 
 
 
