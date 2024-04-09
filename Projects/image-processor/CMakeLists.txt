@@ -23,5 +23,4 @@ add_executable(image_processor
         output/readme.txt
         src/source.cpp
         src/source.h
-        src/test.cpp
         src/Image.cpp)

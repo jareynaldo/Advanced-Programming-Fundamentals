@@ -1,5 +1,5 @@
 //
-// Created by jreyn on 4/6/2024.
+// Created by Jose Reynaldo on 4/6/2024.
 //
 
 #include "source.h"
@@ -14,11 +14,11 @@ using namespace std;
 
 
 
-bool readTGA(const string& filename, TGAHeader& header, vector<unsigned char>& imageData) {
-    ifstream file(filename, ios::binary);
+bool readTGA(const string& fileName, TGAHeader& header, vector<unsigned char>& imageData) {
+    ifstream file(fileName, ios::binary);
     // attempt to open file
     if (!file.is_open()) {
-        cerr << "File "  << filename << " couldn't be opened" << endl;
+        cerr << "File "  << fileName << " couldn't be opened" << endl;
         return false;
     }
 
@@ -34,15 +34,16 @@ bool readTGA(const string& filename, TGAHeader& header, vector<unsigned char>& i
     imageData.resize(imageSize);
     file.read(reinterpret_cast<char*>(imageData.data()), imageSize);
 
+
     return true;
 }
 
 
 
-bool writeTGA(const string& filename, const TGAHeader& header, const vector<unsigned char>& imageData) {
-    ofstream file(filename, ios::binary);
+bool writeTGA(const string& fileName, const TGAHeader& header, const vector<unsigned char>& imageData) {
+    ofstream file(fileName, ios::binary);
     if (!file.is_open()) {
-        cerr << "Could not open the file: " << filename << endl;
+        cerr << "Could not open the file: " << fileName << endl;
         return false;
     }
 
@@ -51,56 +52,89 @@ bool writeTGA(const string& filename, const TGAHeader& header, const vector<unsi
 
     // Write the image data
     file.write(reinterpret_cast<const char*>(imageData.data()), imageData.size());
-
+    cout << "Succesfully wrote " << fileName << endl;
 
     return true;
 }
 
 
+void executeOperation(const string& shortInFileName, const string& shortOutFileName, const string& part) {
+    // since there are always at least two files those get passed in always
+
+    string inputFileName = "../input/" + shortInFileName;
+    string otherFileName = "../input/" + shortOutFileName;
+    Image inputImage, otherImage;
+    readTGA(inputFileName, inputImage.header, inputImage.pixels);
+    readTGA(otherFileName, otherImage.header, otherImage.pixels);
 
 
-int main(int argc, char** argv) {
-    vector<string> args(argv, argv + argc);
-
-    if (args.size() < 4) {
-        cerr << "Usage: " << args[0] << " <input_file> <output_file> <operation>" << endl;
-        return 0;
-    }
-
-
-
-
-    string inputFileName = args[1];
-    string otherFileName = args[2];
-    string operation = args[3];
-
-    // Load the input image
-    Image inputImage;
-    if (readTGA(inputFileName, inputImage.header, inputImage.pixels)) {
-        cout << "Succesfully read " << inputFileName << endl;
-
-    }
-
-    // Perform the operation
-    if (operation == "multiply") {
-        Image otherImage;
-        readTGA(otherFileName, otherImage.header, otherImage.pixels);
+    if (part == "part1") {
         inputImage.applyMultiply(otherImage);
 
-    } else if (operation == "subtract") {
-        // ... handle subtract
+    } else if (part == "part2") {
+        inputImage.applySubtract(otherImage);
+
+    } else if (part == "part3"){
+        inputImage.applyMultiply(otherImage);
+        Image text;
+        readTGA("../input/text.tga", text.header, text.pixels);
+        inputImage.applyScreen(text);
+    }else if (part == "part4") {
+        inputImage.applyMultiply(otherImage);
+
+        Image pattern2;
+        readTGA("../input/pattern2.tga", pattern2.header, pattern2.pixels);
+        inputImage.applySubtract(pattern2);
+
+    } else if (part == "part5") {
+        inputImage.applyOverlay(otherImage);
+
+    } else if (part == "part6") {
+        inputImage.addGreenChannel(200);
+    }else if (part == "part7") {
+        inputImage.scaleRedChannel();
+    }else if (part == "part8") {
+        Image _b;
+        readTGA(inputFileName, _b.header, _b.pixels);
+        _b.clear();
+
+        Image _g;
+        readTGA(inputFileName, _g.header, _g.pixels);
+        _g.clear();
+
+        Image _r;
+        readTGA(inputFileName,  _r.header,  _r.pixels);
+        _r.clear();
+
+        inputImage.seperateValues(_b, _g, _r);
+        writeTGA("../output/part8_r.tga", _r.header, _r.pixels);
+        writeTGA("../output/part8_g.tga", _g.header, _g.pixels);
+        writeTGA("../output/part8_b.tga", _b.header, _b.pixels);
+    }else if(part == "part9"){
+
     }
 
+    string outputFilename = "../output/" + part + ".tga";
+    if(part != "part8"){
+        writeTGA(outputFilename, inputImage.header, inputImage.pixels);
+
+    }
+
+}
 
 
-    string outputFilename = "../output/part1.tga";
+int main() {
 
+    executeOperation("layer1.tga", "pattern1.tga", "part1");
+    executeOperation("car.tga", "layer2.tga", "part2");
+    executeOperation("layer1.tga", "pattern2.tga", "part3");
+    executeOperation("layer2.tga", "circles.tga", "part4");
+    executeOperation( "pattern1.tga", "layer1.tga", "part5");
+    executeOperation( "car.tga", "pattern1.tga", "part6");
+    executeOperation("car.tga", "car.tga", "part7");
+    executeOperation("car.tga", "car.tga", "part8");
+    executeOperation("layer_red.tga", "layer_blue.tga", "part9");
 
-
-
-   if(writeTGA(outputFilename, inputImage.header, inputImage.pixels)){
-       cout << "Succesfully wrote the file! " ;
-   }
 
 
 

@@ -1,5 +1,5 @@
 //
-// Created by jreyn on 4/6/2024.
+// Created by Jose reynaldo on 4/6/2024.
 //
 
 #ifndef IMAGE_PROCESSOR_SOURCE_H
