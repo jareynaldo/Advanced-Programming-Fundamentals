@@ -7,7 +7,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <algorithm>
 
 
 using namespace std;
@@ -17,7 +16,6 @@ using namespace std;
 
 bool readTGA(const string& fileName, TGAHeader& header, vector<unsigned char>& imageData) {
     ifstream file(fileName, ios::binary);
-    // attempt to open file
     if (!file.is_open()) {
         cerr << "File "  << fileName << " couldn't be opened" << endl;
         return false;
@@ -25,13 +23,9 @@ bool readTGA(const string& fileName, TGAHeader& header, vector<unsigned char>& i
 
     // Read the header
     file.read(reinterpret_cast<char*>(&header), sizeof(TGAHeader));
-    // reinterpret_cast will change the pointer type to header type
-    // Calculate the size of the image data in bytes
     int imageSize = header.width * header.height * (header.bitsPerPixel / 8);
-    // Resize the vector to fit
     imageData.resize(imageSize);
     file.read(reinterpret_cast<char*>(imageData.data()), imageSize);
-
 
     return true;
 }
@@ -109,6 +103,7 @@ void executeOperation(const string& shortInFileName, const string& shortOutFileN
         writeTGA("../output/part8_r.tga", _r.header, _r.pixels);
         writeTGA("../output/part8_g.tga", _g.header, _g.pixels);
         writeTGA("../output/part8_b.tga", _b.header, _b.pixels);
+
     }else if(part == "part9"){
         Image red;
         readTGA("../input/layer_red.tga", red.header, red.pixels);
@@ -169,7 +164,7 @@ int main() {
     executeOperation("text2.tga", "text2.tga", "part10");
 
     cout << endl;
-    testExecute();
+    //testExecute();
 
     return 0;
 }

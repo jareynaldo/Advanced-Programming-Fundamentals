@@ -49,6 +49,7 @@ void Image::applyOverlay(const Image& other) {
 
 void Image::addGreenChannel(unsigned char valueToAdd) {
     for (size_t i = 1; i < this->pixels.size(); i += 3) {
+        // add valueToAdd to curret green value, if larger than 255, equals 255
         unsigned int newValue = static_cast<unsigned int>(this->pixels[i]) + valueToAdd;
         this->pixels[i] = (newValue > 255) ? 255 : static_cast<unsigned char>(newValue);
     }
@@ -56,9 +57,11 @@ void Image::addGreenChannel(unsigned char valueToAdd) {
 
 void Image::scaleRedChannel() {
     for (size_t i = 0; i < this->pixels.size(); i += 3) {
+        // multiply red channel by 4
         float redValue = (this->pixels[i + 2] / 255.0f ) * 4;
         redValue = (redValue > 1) ? 1 : redValue;
         this->pixels[i + 2] = static_cast<unsigned char>(redValue * 255.0f + 0.5f);
+        // blue channel = 0
         this->pixels[i] = static_cast<unsigned char>(0) ;
     }
 }
@@ -88,6 +91,7 @@ void Image::seperateValues(Image& a, Image& b, Image& c){
 
 void Image::combineValues(const Image& green, const Image& red){
     for (size_t i = 0; i < this->pixels.size(); i += 3) {
+        // with a blue base, add green and red values
         this->pixels[i+ 1] = green.pixels[i + 1];
         this->pixels[i+2] = red.pixels[i+2];
     }
@@ -97,7 +101,7 @@ void Image::rotate180() {
     size_t right = pixels.size() - 1;
 
     while (left < right) {
-        // Since each pixel is 3 bytes (BGR), we need to swap each component
+        // Since each pixel is 3 bytes, we need to swap each component
         for (size_t i = 0; i < 3; ++i) {
             std::swap(pixels[left + i], pixels[right - 2 + i]);
         }
