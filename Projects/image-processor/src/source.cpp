@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 
 using namespace std;
@@ -53,6 +54,7 @@ bool writeTGA(const string& fileName, const TGAHeader& header, const vector<unsi
 
     return true;
 }
+
 
 
 void executeOperation(const string& shortInFileName, const string& shortOutFileName, const string& part) {
@@ -111,6 +113,8 @@ void executeOperation(const string& shortInFileName, const string& shortOutFileN
         Image red;
         readTGA("../input/layer_red.tga", red.header, red.pixels);
         inputImage.combineValues(otherImage, red);
+    }else if (part == "part10") {
+        inputImage.rotate180();
     }
 
     string outputFilename = "../output/" + part + ".tga";
@@ -125,7 +129,7 @@ void test(const string &outputFileName, const string &exampleFileName, const int
     readTGA(outputFileName, output.header, output.pixels);
 
     Image example;
-    readTGA(outputFileName, example.header, example.pixels);
+    readTGA(exampleFileName, example.header, example.pixels);
     bool checker = true;
 
     for(int i = 0; i < output.pixels.size(); i++){
@@ -134,19 +138,17 @@ void test(const string &outputFileName, const string &exampleFileName, const int
         }
     }
     if(checker){
-        cout << "Test For file " << outputFileName << "....Passed!" << endl;
+        cout << "Test For test " << testNumber << "....Passed!" << endl;
     } else{
-        cout << "Test For file " << outputFileName << " ....Failed" <<endl;
-
+        cout << "Test For test " << testNumber << " ....Failed" <<endl;
     }
-
 }
 void testExecute(){
-    vector<string> output = {"part2.tga", "part3.tga", "part4.tga", "part5.tga", "part6.tga", "part7.tga", "part8_r.tga", "part8_g.tga", "part8_b.tga", "part9.tga"};
+    vector<string> output = {"part1.tga", "part2.tga", "part3.tga", "part4.tga", "part5.tga", "part6.tga", "part7.tga", "part8_r.tga", "part8_g.tga", "part8_b.tga", "part9.tga", "part10.tga"};
     vector<string> example = output;
     for(int i  = 0; i < output.size(); i++){
-        output.at(i) = "../output/" +  output.at(i);
-        example.at(i) = "../examples/EXAMPLE_" +  output.at(i);
+        output.at(i) = "../output/" +  output.at(i);\
+        example.at(i) = "../examples/EXAMPLE_" +  example.at(i);
         test(output.at(i), example.at(i), i + 1);
     }
 
@@ -154,19 +156,20 @@ void testExecute(){
 
 int main() {
 
+
+    executeOperation("layer1.tga", "pattern1.tga", "part1");
+    executeOperation("car.tga", "layer2.tga", "part2");
+    executeOperation("layer1.tga", "pattern2.tga", "part3");
+    executeOperation("layer2.tga", "circles.tga", "part4");
+    executeOperation( "pattern1.tga", "layer1.tga", "part5");
+    executeOperation( "car.tga", "pattern1.tga", "part6");
+    executeOperation("car.tga", "car.tga", "part7");
+    executeOperation("car.tga", "car.tga", "part8");
+    executeOperation("layer_blue.tga", "layer_green.tga", "part9");
+    executeOperation("text2.tga", "text2.tga", "part10");
+
+    cout << endl;
     testExecute();
-//    executeOperation("layer1.tga", "pattern1.tga", "part1");
-//    executeOperation("car.tga", "layer2.tga", "part2");
-//    executeOperation("layer1.tga", "pattern2.tga", "part3");
-//    executeOperation("layer2.tga", "circles.tga", "part4");
-//    executeOperation( "pattern1.tga", "layer1.tga", "part5");
-//    executeOperation( "car.tga", "pattern1.tga", "part6");
-//    executeOperation("car.tga", "car.tga", "part7");
-//    executeOperation("car.tga", "car.tga", "part8");
-//    executeOperation("layer_blue.tga", "layer_green.tga", "part9");
-//
-
-
 
     return 0;
 }

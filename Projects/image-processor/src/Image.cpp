@@ -92,3 +92,17 @@ void Image::combineValues(const Image& green, const Image& red){
         this->pixels[i+2] = red.pixels[i+2];
     }
 }
+void Image::rotate180() {
+    size_t left = 0;
+    size_t right = pixels.size() - 1;
+
+    while (left < right) {
+        // Since each pixel is 3 bytes (BGR), we need to swap each component
+        for (size_t i = 0; i < 3; ++i) {
+            std::swap(pixels[left + i], pixels[right - 2 + i]);
+        }
+
+        left += 3;
+        right -= 3;
+    }
+}

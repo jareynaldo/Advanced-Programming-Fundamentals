@@ -28,6 +28,7 @@ using namespace std;
         void clear();
         void seperateValues(Image& a, Image& b, Image& c);
         void combineValues(const Image& green, const Image& red);
+        void rotate180();
 
         unsigned char multiplyPixels(unsigned char a, unsigned char b) {
 
@@ -46,6 +47,7 @@ using namespace std;
             float result = 1.0f - (1.0f - fa) * (1.0f - fb);
             return static_cast<unsigned char>(result * 255.0f + 0.5f);
         }
+
 
     };
 
