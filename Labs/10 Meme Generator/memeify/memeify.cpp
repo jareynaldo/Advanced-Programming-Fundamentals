@@ -8,8 +8,15 @@ using namespace sf;
 
 int main(int argc, char* argv[]) {
 
+    // when i run directly from main func it runs how it's mean to and
+    // works. But when i attmept to excecute form command line it
+    // doesn't work at all. Not even the "hello there prints".
 
-   cout << "hello there" << endl;
+//    char* argv[2];
+//    argv[1] = "doge.jpg";
+//    argv[2] = "Such memes";
+    cout << "hello there" << endl;
+//    int argc = 2;
 
     if (argc < 2) {
         cerr << "need more than 2 arguments" << endl;
