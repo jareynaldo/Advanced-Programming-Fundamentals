@@ -1,3 +1,4 @@
+// Created by Jose Reynaldo, Karan Faldu, and Jaxon Kundrat
 
 #include <iostream>
 template<typename T>
@@ -21,7 +22,21 @@ private:
         }
 
     };
+    ~ParticleFactory<T>(){
+        for (int i = 0; i < inventory.size(); i++){
+            delete inventory[i];
+        }
+
+    };
+
+    ParticleFactory<T>& operator = (const ParticleFactory& other){
+        inventory = other.inventory;
+    }
+    ParticleFactory<T>(const ParticleFactory& other){
+        inventory = other.inventory;
+    }
 public:
+
 
     static ParticleFactory<T> &getInstance(){
         // creates an instance and returns it
