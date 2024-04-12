@@ -1,5 +1,5 @@
 //
-// Created by jreyn on 4/5/2024.
+// Created by jose reynaldo and karan faldu
 //
 
 #ifndef MEMEIFY_MEMER_H

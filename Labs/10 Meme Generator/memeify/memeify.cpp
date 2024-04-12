@@ -1,3 +1,6 @@
+//
+// By Jose Reynaldo and Karan Faldu
+//
 #include "memer.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -48,7 +51,10 @@ int main(int argc, char* argv[]) {
     while (window.isOpen()) {
         Event event;
         while (window.pollEvent(event)) {
-            if (event.type == Event::Closed) window.close();
+            if (event.type == Event::Closed) {
+                window.close();
+            }
+
         }
 
         window.clear();
