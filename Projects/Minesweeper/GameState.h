@@ -5,6 +5,12 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Tile.h"
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <random>
+#include <fstream>
 
 class GameState {
 public:
@@ -14,6 +20,7 @@ public:
     GameState(sf::Vector2i dimensions, int numberOfMines);
     GameState(const char* filepath);
     void draw(sf::RenderWindow& window);
+    int countAdjacentMines(int x, int y);
 
 
 //    // Get the current count of flags placed on the board
@@ -35,6 +42,8 @@ public:
 
 private:
     std::vector<std::vector<Tile>> board;
+    sf::Texture tileTexture;
+
 
 //    // Number of mines on the board
 //    int mineCount;

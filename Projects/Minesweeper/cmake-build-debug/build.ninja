@@ -77,6 +77,13 @@ build CMakeFiles/Minesweeper.dir/Button.cpp.obj: CXX_COMPILER__Minesweeper_unsca
   OBJECT_DIR = CMakeFiles\Minesweeper.dir
   OBJECT_FILE_DIR = CMakeFiles\Minesweeper.dir
 
+build CMakeFiles/Minesweeper.dir/Toolbox.cpp.obj: CXX_COMPILER__Minesweeper_unscanned_Debug C$:/University$ of$ Florida/Spring$ 24/COP3504/Projects/Minesweeper/Toolbox.cpp || cmake_object_order_depends_target_Minesweeper
+  DEP_FILE = CMakeFiles\Minesweeper.dir\Toolbox.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -I"C:/University of Florida/Spring 24/COP3504/Projects/Minesweeper/." -isystem C:/Libraries/SFML-2.5.1/include
+  OBJECT_DIR = CMakeFiles\Minesweeper.dir
+  OBJECT_FILE_DIR = CMakeFiles\Minesweeper.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Minesweeper
@@ -85,7 +92,7 @@ build CMakeFiles/Minesweeper.dir/Button.cpp.obj: CXX_COMPILER__Minesweeper_unsca
 #############################################
 # Link the executable Minesweeper.exe
 
-build Minesweeper.exe: CXX_EXECUTABLE_LINKER__Minesweeper_Debug CMakeFiles/Minesweeper.dir/minesweeper.cpp.obj CMakeFiles/Minesweeper.dir/GameState.cpp.obj CMakeFiles/Minesweeper.dir/Tile.cpp.obj CMakeFiles/Minesweeper.dir/Button.cpp.obj | C$:/Libraries/SFML-2.5.1/lib/libsfml-graphics-d.a C$:/Libraries/SFML-2.5.1/lib/libsfml-window-d.a C$:/Libraries/SFML-2.5.1/lib/libsfml-system-d.a
+build Minesweeper.exe: CXX_EXECUTABLE_LINKER__Minesweeper_Debug CMakeFiles/Minesweeper.dir/minesweeper.cpp.obj CMakeFiles/Minesweeper.dir/GameState.cpp.obj CMakeFiles/Minesweeper.dir/Tile.cpp.obj CMakeFiles/Minesweeper.dir/Button.cpp.obj CMakeFiles/Minesweeper.dir/Toolbox.cpp.obj | C$:/Libraries/SFML-2.5.1/lib/libsfml-graphics-d.a C$:/Libraries/SFML-2.5.1/lib/libsfml-window-d.a C$:/Libraries/SFML-2.5.1/lib/libsfml-system-d.a
   FLAGS = -g
   LINK_LIBRARIES = C:/Libraries/SFML-2.5.1/lib/libsfml-graphics-d.a  C:/Libraries/SFML-2.5.1/lib/libsfml-window-d.a  C:/Libraries/SFML-2.5.1/lib/libsfml-system-d.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Minesweeper.dir
@@ -132,11 +139,6 @@ build Minesweeper: phony Minesweeper.exe
 # Folder: C:/University of Florida/Spring 24/COP3504/Projects/Minesweeper/cmake-build-debug
 
 build all: phony Minesweeper.exe
-
-# =============================================================================
-# Unknown Build Time Dependencies.
-# Tell Ninja that they may appear as side effects of build rules
-# otherwise ordered by order-only dependencies.
 
 # =============================================================================
 # Built-in targets

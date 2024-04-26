@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION  3.27)
 project(Minesweeper)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -18,6 +18,7 @@ add_executable(Minesweeper
         Toolbox.h
         GameState.cpp
         Tile.cpp
-        Button.cpp)
+        Button.cpp
+        Toolbox.cpp)
 
 target_link_libraries(Minesweeper sfml-graphics sfml-window sfml-system)

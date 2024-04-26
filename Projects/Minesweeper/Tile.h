@@ -1,5 +1,3 @@
-// Tile.h
-
 #ifndef TILE_H
 #define TILE_H
 
@@ -9,28 +7,36 @@
 class Tile {
 public:
 
-    Tile(sf::Vector2f position);
+    Tile(sf::Vector2f position, const sf::Texture& texture,int x, int y);
 
-// Enum to represent the tile's state
     enum class State { REVEALED, HIDDEN, FLAGGED, EXPLODED };
     void setMine(bool mine);
     void draw(sf::RenderWindow& window);
+    void setNeighbors(const std::array<Tile*, 8>& newNeighbors);
+    int countAdjacentMines();
+    void reveal();
+    void revealNeighbors();
 
-//    Tile(sf::Vector2f position, bool hasMine = false);
-//    sf::Vector2f getLocation() const;
-//    State getState() const;
-//    void setState(State state);
+    sf::Vector2f getLocation() const;
+    State getState() const;
+    void setState(State state);
 //    void setNeighbors(const std::array<Tile*, 8>& neighbors);
-//    void onClickLeft();
-//    void onClickRight();
+    void onClickLeft();
+    void onClickRight();
 //    bool hasMine() const;
 //    void revealNeighbors();
 
+    bool hasMine;
+
 private:
+    sf::Vector2f position;
+    int gridX, gridY;
+    std::array<Tile*, 8> neighbors;
     sf::Sprite sprite;
     sf::Texture texture;
 
-    bool hasMine;
+
+    State state;
 //
 //    sf::Vector2f position;
 //    State state;
@@ -42,4 +48,4 @@ private:
 
 };
 
-#endif // TILE_H
+#endif

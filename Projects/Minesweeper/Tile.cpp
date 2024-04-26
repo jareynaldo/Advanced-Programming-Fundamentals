@@ -3,17 +3,16 @@
 
 
 #include "Tile.h"
-#include <iostream>
 
 
 
-Tile::Tile(sf::Vector2f position) : hasMine(false) {
 
-    if (!texture.loadFromFile("images/tile_hidden.png")) {
-        std::cerr << "Failed to load tile texture!" << std::endl;
-    }
+Tile::Tile(sf::Vector2f poss, const sf::Texture& texture, int x, int y) : hasMine(false), gridX(x), gridY(y) {
+
+    state = State::HIDDEN;
+    position = poss;
     sprite.setTexture(texture);
-    sprite.setPosition(position);
+    sprite.setPosition(poss);
 }
 void Tile::setMine(bool mine) {
     hasMine = mine;
@@ -24,27 +23,78 @@ void Tile::draw(sf::RenderWindow& window) {
     window.draw(sprite);
 
 }
+void Tile::setNeighbors(const std::array<Tile *, 8> &newNeighbors) {
+    neighbors = newNeighbors;
+}
+
+void Tile::reveal() {
+    // Implement reveal logic, including checking the state and revealing neighbors if needed
+    if (state == State::HIDDEN) {
+        setState(State::REVEALED);
+        if (countAdjacentMines() == 0) {
+            for (Tile* neighbor : neighbors) {
+                if (neighbor) {
+                    neighbor->reveal();
+                }
+            }
+        }
+    }
+}
+
+int Tile::countAdjacentMines() {
+    int mineCount = 0;
+    for (int i = 0; i < neighbors.size(); ++i) {
+        if (neighbors[i] && neighbors[i]->hasMine) {
+            mineCount++;
+        }
+    }
+    return mineCount;
+}
 
 
-//
-//Tile::Tile(sf::Vector2f position, bool hasMine)
-//        : position(position), mine(hasMine), state(State::HIDDEN) {
-//    // Load the texture and set up the sprite for the tile
-//    // You need to load the appropriate texture based on the tile's initial state
-//}
-//
-//sf::Vector2f Tile::getLocation() const {
-//    return position;
-//}
-//
-//Tile::State Tile::getState() const {
-//    return state;
-//}
-//
-//void Tile::setState(State newState) {
-//    state = newState;
-//    // Update the sprite to reflect the new state
-//}
+void Tile::onClickLeft() {
+    if (state == State::HIDDEN) {
+        state = hasMine ? State::EXPLODED : State::REVEALED;
+        if (!hasMine && countAdjacentMines() == 0) {
+            revealNeighbors();
+        }
+    }
+}
+void Tile::revealNeighbors() {
+    for (Tile* neighbor : neighbors) {
+        if (neighbor != nullptr && !neighbor->hasMine && neighbor->getState() == Tile::State::HIDDEN) {
+            neighbor->setState(Tile::State::REVEALED);
+            // If the neighbor also has no adjacent mines, recurse and reveal its neighbors
+            if (neighbor->countAdjacentMines() == 0) {
+                neighbor->revealNeighbors();
+            }
+        }
+    }
+}
+
+void Tile::onClickRight() {
+    if (state == State::HIDDEN) {
+        state = State::FLAGGED;
+    } else if (state == State::FLAGGED) {
+        state = State::HIDDEN;
+    }
+}
+
+
+
+sf::Vector2f Tile::getLocation() const {
+    return position;
+}
+
+
+Tile::State Tile::getState() const {
+    return state;
+}
+
+
+void Tile::setState(State newState) {
+    state = newState;
+}
 //
 //void Tile::setNeighbors(const std::array<Tile*, 8>& newNeighbors) {
 //    neighbors = newNeighbors;
