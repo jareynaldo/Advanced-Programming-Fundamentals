@@ -1,6 +1,6 @@
 
 #include "GameState.h"
-GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) {
+GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines): mineCount(_numberOfMines), flagCount(0) {
     int width = _dimensions.x;
     int height = _dimensions.y;
     std::vector<std::vector<int>> minePositions(height, std::vector<int>(width, 0));
@@ -57,9 +57,16 @@ GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) {
             board[y][x].setNeighbors(neighbors);
         }
     }
+    digitsTexture.loadFromFile("images/digits.png");
+    for (int i = 0; i < digitSprites.size(); ++i) {
+        digitSprites[i].setTexture(digitsTexture);
+        // Initially set them all to '0'
+        digitSprites[i].setTextureRect(sf::IntRect(0, 0, 21, 32));
+        digitSprites[i].setPosition(sf::Vector2f(21*i, 513));
+    }
 }
 
-GameState::GameState(const char* filepath) {
+GameState::GameState(const char* filepath): mineCount(50), flagCount(0) {
 
     if (!tileTexture.loadFromFile("images/tile_hidden.png")) {
         std::cerr << "Failed to load tile texture!" << std::endl;
@@ -109,6 +116,13 @@ GameState::GameState(const char* filepath) {
             board[y][x].setNeighbors(neighbors);
         }
     }
+    digitsTexture.loadFromFile("images/digits.png");
+    for (int i = 0; i < digitSprites.size(); ++i) {
+        digitSprites[i].setTexture(digitsTexture);
+        // Initially set them all to '0'
+        digitSprites[i].setTextureRect(sf::IntRect(0, 0, 21, 32));
+        digitSprites[i].setPosition(sf::Vector2f(21*i, 513));
+    }
 }
 
 
@@ -118,6 +132,12 @@ void GameState::draw(sf::RenderWindow& window) {
             tile.draw(window);
         }
     }
+    updateMineCounterDisplay();
+    for (const auto& sprite : digitSprites) {
+        window.draw(sprite);
+    }
+
+
 }
 int GameState::countAdjacentMines(int x, int y) {
     int count = 0;
@@ -135,40 +155,68 @@ int GameState::countAdjacentMines(int x, int y) {
     }
     return count;
 }
-//
-//int GameState::getFlagCount() const {
-//    return flagCount;
-//}
-//
-//int GameState::getMineCount() const {
-//    return mineCount;
-//}
-//
-//Tile* GameState::getTile(int x, int y) {
-//    if (y >= tiles.size() || x >= tiles[y].size()) {
-//        return nullptr; // Out of bounds
-//    }
-//    return &tiles[y][x];
-//}
-//
-//GameState::PlayStatus GameState::getPlayStatus() const {
-//    return playStatus;
-//}
-//
-//void GameState::setPlayStatus(PlayStatus status) {
-//    playStatus = status;
-//}
-//
-//void GameState::handleClick(const sf::Vector2f& position, bool isLeftClick) {
-//    int tileX = position.x / 800;
-//    int tileY = position.y / 600;
-//
-//    Tile* clickedTile = getTile(tileX, tileY);
-//    if (clickedTile) {
-//        if (isLeftClick) {
-//            clickedTile->onClickLeft();
-//        } else {
-//            clickedTile->onClickRight();
-//        }
-//    }
-//}
+void GameState::updateMineCounterDisplay() {
+    int remainingMines = mineCount - flagCount;
+    std::string countStr = std::to_string(std::abs(remainingMines));
+
+    // Ensure there are no more than 3 digits; adjust as necessary for your application
+    if (countStr.length() > 3) {
+        countStr = countStr.substr(countStr.length() - 3);
+    }
+
+    // Pad with leading zeros if necessary
+    if (countStr.length() < 3) {
+        countStr = std::string(3 - countStr.length(), '0') + countStr;
+    }
+
+    for (size_t i = 0; i < countStr.size(); ++i) {
+        int digit = countStr[i] == '-' ? 10 : countStr[i] - '0'; // Assuming '-' is at the 11th position in the sprite sheet
+        digitSprites[i].setTextureRect(sf::IntRect(21 * digit, 0, 21, 32));
+    }
+}
+
+
+
+void GameState::placeFlag(int x, int y) {
+    Tile& tile = board[y][x];
+    if (tile.getState() == Tile::State::HIDDEN && tile.getState() != Tile::State::FLAGGED) {
+        tile.setState(Tile::State::FLAGGED);
+        flagCount++;
+        updateMineCounterDisplay();
+    }
+}
+
+void GameState::removeFlag(int x, int y) {
+    Tile& tile = board[y][x];
+    if (tile.getState() == Tile::State::FLAGGED) {
+        tile.setState(Tile::State::HIDDEN);
+        flagCount--;
+        updateMineCounterDisplay();
+    }
+}
+sf::Vector2i GameState::getDimensions() {
+    return {25, 16};
+}
+
+Tile& GameState::getTile(int x, int y) {
+    return board[y][x]; // ure
+}
+
+void GameState::updateFlagCount() {
+    // Update the flag count and the mine counter display
+    flagCount = countFlags();
+    updateMineCounterDisplay();
+}
+
+int GameState::countFlags() const {
+    // Count the number of flagged tiles on the board
+    int flags = 0;
+    for (const auto& row : board) {
+        for (const auto& tile : row) {
+            if (tile.getState() == Tile::State::FLAGGED) {
+                ++flags;
+            }
+        }
+    }
+    return flags;
+}

@@ -12,6 +12,7 @@ public:
     void draw(sf::RenderWindow& window);
     void onClick();
     void handleEvent(const sf::Event& event);
+    void updateMineCounterDisplay();
 
 private:
     sf::Vector2f position;

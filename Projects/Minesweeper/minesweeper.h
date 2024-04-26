@@ -16,6 +16,7 @@ void restart();
 void render(sf::RenderWindow& window);
 
 void toggleDebugMode();
+bool isValidPosition(const sf::Vector2i& pos, const sf::Vector2i& dimensions);
 
 bool getDebugMode();
 #endif

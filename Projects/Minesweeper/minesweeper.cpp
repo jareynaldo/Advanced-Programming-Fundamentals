@@ -13,8 +13,6 @@ int launch() {
     toolbox.window = &window;
 
 
-    GameState gameState("boards/randomBoard.brd");
-
     sf::Texture newGameTexture, debugTexture, test1Texture, test2Texture;
     sf::Sprite newGameSprite, debugSprite, test1Sprite, test2Sprite;
     newGameTexture.loadFromFile("images/face_happy.png");
@@ -57,6 +55,7 @@ int launch() {
     debugButton.setSprite(&debugSprite);
     test1Button.setSprite(&test1Sprite);
     test2Button.setSprite(&test2Sprite);
+
     toolbox.newGameButton = &newGameButton;
     toolbox.debugButton = &debugButton;
     toolbox.testButton1 = &test1Button;
@@ -69,16 +68,34 @@ int launch() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (event.type == sf::Event::MouseButtonPressed) {
+                // Get mouse position and convert it to grid coordinates
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                sf::Vector2i gridPos(mousePos.x / 32, mousePos.y / 32); // Assuming TILE_SIZE is the size of your tiles
+
+                if (isValidPosition(gridPos, toolbox.gameState->getDimensions())) {
+                    Tile& clickedTile = toolbox.gameState->getTile(gridPos.x, gridPos.y);
+
+                    if (event.mouseButton.button == sf::Mouse::Left && clickedTile.getState() != Tile::State::FLAGGED) {
+                        clickedTile.onClickLeft();
+                    }
+                    else if (event.mouseButton.button == sf::Mouse::Right) {
+                        clickedTile.onClickRight();
+                        toolbox.gameState->updateFlagCount();
+                    }
+                }
+            }
         }
+        toolbox.gameState = new GameState("boards/testboard1.brd");
         toolbox.debugButton->handleEvent(event);
         toolbox.newGameButton->handleEvent(event);
+        toolbox.gameState->updateMineCounterDisplay();
 
 
         toolbox.window->clear();
-        gameState.draw(window);
-
+        toolbox.gameState->draw(window);
         toolbox.newGameButton->draw(window);
-        toolbox.debugButton->draw(window);
+        toolbox.debugButton->draw(window);;
         toolbox.testButton1->draw(window);
         toolbox.testButton2->draw(window);
 
@@ -113,6 +130,10 @@ bool getDebugMode() {
     // Return the current state of the debug mode
     return debugMode;
 }
+bool isValidPosition(const sf::Vector2i& pos, const sf::Vector2i& dimensions) {
+    return pos.x >= 0 && pos.y >= 0 && pos.x < dimensions.x && pos.y < dimensions.y;
+}
+
 
 int main() {
     return launch();
