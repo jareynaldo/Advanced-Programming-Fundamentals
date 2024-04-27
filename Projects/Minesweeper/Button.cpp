@@ -31,5 +31,10 @@ void Button::handleEvent(const sf::Event& event) {
         }
     }
 }
+bool Button::contains(int mouseX, int mouseY) const {
+
+    return mouseX >= position.x && mouseX < position.x + 64 &&
+           mouseY >= position.y && mouseY < position.y + 64;
+}
 
 

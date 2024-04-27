@@ -12,12 +12,13 @@ public:
     void draw(sf::RenderWindow& window);
     void onClick();
     void handleEvent(const sf::Event& event);
-    void updateMineCounterDisplay();
+    bool contains(int mouseX, int mouseY) const;
+
 
 private:
     sf::Vector2f position;
     sf::Sprite sprite;
-    std::function<void()> onClickCallback; // Callback function for click events
+    std::function<void()> onClickCallback;
 };
 
 #endif

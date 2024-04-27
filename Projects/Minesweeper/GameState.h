@@ -21,8 +21,8 @@ public:
     GameState(const char* filepath);
     void draw(sf::RenderWindow& window);
     int countAdjacentMines(int x, int y);
-    void placeFlag(int x, int y); // Call this when a flag is placed
-    void removeFlag(int x, int y); // Call this when a flag is removed
+    void placeFlag(int x, int y);
+    void removeFlag(int x, int y);
     int getMineCount() const { return mineCount; }
     int getFlagCount() const { return flagCount; }
     void updateMineCounterDisplay();

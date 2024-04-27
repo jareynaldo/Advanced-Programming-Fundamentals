@@ -11,8 +11,10 @@ Tile::Tile(sf::Vector2f poss, const sf::Texture& texture, int x, int y) : hasMin
 
     state = State::HIDDEN;
     position = poss;
-    sprite.setTexture(texture);
-    sprite.setPosition(poss);
+    baseSprite.setTexture(texture);
+    baseSprite.setPosition(poss);
+    overlaySprite.setPosition(poss);
+
 }
 void Tile::setMine(bool mine) {
     hasMine = mine;
@@ -20,26 +22,16 @@ void Tile::setMine(bool mine) {
 }
 
 void Tile::draw(sf::RenderWindow& window) {
-    window.draw(sprite);
-
+    window.draw(baseSprite);
+    if (overlaySprite.getTexture()) {
+        window.draw(overlaySprite);
+    }
 }
 void Tile::setNeighbors(const std::array<Tile *, 8> &newNeighbors) {
     neighbors = newNeighbors;
 }
 
-void Tile::reveal() {
-    // Implement reveal logic, including checking the state and revealing neighbors if needed
-    if (state == State::HIDDEN) {
-        setState(State::REVEALED);
-        if (countAdjacentMines() == 0) {
-            for (Tile* neighbor : neighbors) {
-                if (neighbor) {
-                    neighbor->reveal();
-                }
-            }
-        }
-    }
-}
+
 
 int Tile::countAdjacentMines() {
     int mineCount = 0;
@@ -52,14 +44,7 @@ int Tile::countAdjacentMines() {
 }
 
 
-void Tile::onClickLeft() {
-    if (state == State::HIDDEN) {
-        state = hasMine ? State::EXPLODED : State::REVEALED;
-        if (!hasMine && countAdjacentMines() == 0) {
-            revealNeighbors();
-        }
-    }
-}
+
 void Tile::revealNeighbors() {
     for (Tile* neighbor : neighbors) {
         if (neighbor != nullptr && !neighbor->hasMine && neighbor->getState() == Tile::State::HIDDEN) {
@@ -72,13 +57,6 @@ void Tile::revealNeighbors() {
     }
 }
 
-void Tile::onClickRight() {
-    if (state == State::HIDDEN) {
-        state = State::FLAGGED;
-    } else if (state == State::FLAGGED) {
-        state = State::HIDDEN;
-    }
-}
 
 
 
@@ -95,31 +73,66 @@ Tile::State Tile::getState() const {
 void Tile::setState(State newState) {
     state = newState;
 }
-//
-//void Tile::setNeighbors(const std::array<Tile*, 8>& newNeighbors) {
-//    neighbors = newNeighbors;
-//}
-//
-//void Tile::onClickLeft() {
-//    // Handle left-click behavior:
-//    // If the tile is hidden, reveal it; if it's a mine, explode
-//
-//}
-//
-//void Tile::onClickRight() {
-//    // Handle right-click behavior:
-//    // Toggle the tile state between FLAGGED and HIDDEN
-//}
-//
-//void Tile::draw(sf::RenderWindow& window) {
-//    // Set the sprite's texture and position, then draw it to the window
-//    window.draw(sprite);
-//}
-//
-//bool Tile::hasMine() const {
-//    return mine;
-//}
-//
-//void Tile::revealNeighbors() {
-//    // If the tile has no adjacent mines, call reveal on each neighbor
-//}
+
+void Tile::onClickLeft() {
+    std::cout << "FUCKK";
+    if (state == State::FLAGGED || state == State::REVEALED) {
+        return;
+    }
+
+    if (hasMine) {
+
+        overlayTexture.loadFromFile("images/mine.png");
+        overlaySprite.setTexture(overlayTexture);
+        texture.loadFromFile("images/tile_hidden.png");
+        baseSprite.setTexture(texture);
+        state = State::EXPLODED;
+
+    } else {
+        
+        reveal();
+    }
+
+}
+
+void Tile::onClickRight() {
+    std::cout << "do tjing";
+    if (state == State::REVEALED) {
+        return; // Do nothing if the tile is already revealed
+    }
+
+    if (state == State::HIDDEN) {
+        state = State::FLAGGED;
+        texture.loadFromFile("images/flag.png");
+    } else if (state == State::FLAGGED) {
+        state = State::HIDDEN;
+        texture.loadFromFile("images/tile_hidden.png");
+    }
+    overlaySprite.setTexture(texture); // Update the texture for the sprite
+}
+void Tile::reveal() {
+    if (state == State::FLAGGED || state == State::REVEALED) {
+        return;
+    }
+
+    state = State::REVEALED; // Set the state to revealed.
+    int mines = countAdjacentMines();
+
+    // Update the base texture to the revealed state.
+    texture.loadFromFile("images/tile_revealed.png");
+    baseSprite.setTexture(texture);
+
+    if (mines > 0) {
+        // Set the overlay texture to the number corresponding to the count of adjacent mines.
+        overlayTexture.loadFromFile("images/number_" + std::to_string(mines) + ".png");
+        overlaySprite.setTexture(overlayTexture);
+    } else {
+        // If there are no adjacent mines, recursively reveal the neighbors.
+        for (Tile* neighbor : neighbors) {
+            if (neighbor != nullptr) {
+                neighbor->reveal();
+            }
+        }
+    }
+    // Note: Ensure you have logic to draw both the baseSprite and the overlaySprite.
+}

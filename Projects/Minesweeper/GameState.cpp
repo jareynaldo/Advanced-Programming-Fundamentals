@@ -60,7 +60,6 @@ GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines): mineCount(_n
     digitsTexture.loadFromFile("images/digits.png");
     for (int i = 0; i < digitSprites.size(); ++i) {
         digitSprites[i].setTexture(digitsTexture);
-        // Initially set them all to '0'
         digitSprites[i].setTextureRect(sf::IntRect(0, 0, 21, 32));
         digitSprites[i].setPosition(sf::Vector2f(21*i, 513));
     }
@@ -159,18 +158,18 @@ void GameState::updateMineCounterDisplay() {
     int remainingMines = mineCount - flagCount;
     std::string countStr = std::to_string(std::abs(remainingMines));
 
-    // Ensure there are no more than 3 digits; adjust as necessary for your application
+    // Ensure there are no more than 3 digits
     if (countStr.length() > 3) {
         countStr = countStr.substr(countStr.length() - 3);
     }
 
-    // Pad with leading zeros if necessary
+
     if (countStr.length() < 3) {
         countStr = std::string(3 - countStr.length(), '0') + countStr;
     }
 
     for (size_t i = 0; i < countStr.size(); ++i) {
-        int digit = countStr[i] == '-' ? 10 : countStr[i] - '0'; // Assuming '-' is at the 11th position in the sprite sheet
+        int digit = countStr[i] == '-' ? 10 : countStr[i] - '0';
         digitSprites[i].setTextureRect(sf::IntRect(21 * digit, 0, 21, 32));
     }
 }
@@ -199,17 +198,15 @@ sf::Vector2i GameState::getDimensions() {
 }
 
 Tile& GameState::getTile(int x, int y) {
-    return board[y][x]; // ure
+    return board[y][x];
 }
 
 void GameState::updateFlagCount() {
-    // Update the flag count and the mine counter display
     flagCount = countFlags();
     updateMineCounterDisplay();
 }
 
 int GameState::countFlags() const {
-    // Count the number of flagged tiles on the board
     int flags = 0;
     for (const auto& row : board) {
         for (const auto& tile : row) {

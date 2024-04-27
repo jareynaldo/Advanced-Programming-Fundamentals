@@ -13,42 +13,40 @@ int launch() {
     toolbox.window = &window;
 
 
-    sf::Texture newGameTexture, debugTexture, test1Texture, test2Texture;
-    sf::Sprite newGameSprite, debugSprite, test1Sprite, test2Sprite;
+    sf::Texture newGameTexture, debugTexture, test1Texture, test2Texture, test3Texture;
+    sf::Sprite newGameSprite, debugSprite, test1Sprite, test2Sprite,test3Sprite;
     newGameTexture.loadFromFile("images/face_happy.png");
     debugTexture.loadFromFile("images/debug.png");
     test1Texture.loadFromFile("images/test_1.png");
     test2Texture.loadFromFile("images/test_2.png");
+    test2Texture.loadFromFile("images/test_3.png");
+
 
     newGameSprite.setTexture(newGameTexture);
     debugSprite.setTexture(debugTexture);
     test1Sprite.setTexture(test1Texture);
     test2Sprite.setTexture(test2Texture);
+    test3Sprite.setTexture(test3Texture);
 
-    Button newGameButton(sf::Vector2f(360, 513), [&toolbox]() {
-        if(toolbox.gameState != nullptr) {
-            delete toolbox.gameState;
-        }
-        toolbox.gameState = new GameState(sf::Vector2i(25, 16), 50);
+    GameState* gameState = new GameState("boards/testboard3.brd");
 
-    });
+
+    auto resetGame = [&window, &gameState](const char* boardPath) {
+        delete gameState;
+        gameState = new GameState(boardPath);
+        window.clear();
+        gameState->draw(window);
+        window.display();
+    };
+    Button newGameButton(sf::Vector2f(360, 513), [&]() { resetGame("boards/testboard.brd"); });
+    Button test1Button(sf::Vector2f(552, 513), [&]() { resetGame("boards/testboard1.brd"); });
+    Button test2Button(sf::Vector2f(616, 513), [&]() { resetGame("boards/testboard2.brd"); });
+    Button test3Button(sf::Vector2f(680, 513), [&]() { resetGame("boards/testboard3.brd"); });
+
+
     Button debugButton(sf::Vector2f(488, 513), [&]() {
-        // Code to toggle debug mode
-        toggleDebugMode(); // Assuming you have this function implemented
-    });
 
-    Button test1Button(sf::Vector2f(552, 513), [&]() {
-        if(toolbox.gameState != nullptr) {
-            delete toolbox.gameState;
-        }
-        toolbox.gameState = new GameState("boards/testboard1.brd");
-    });
-
-    Button test2Button(sf::Vector2f(616, 513), [&]() {
-        if(toolbox.gameState != nullptr) {
-            delete toolbox.gameState;
-        }
-        toolbox.gameState = new GameState("boards/testboard2.brd");
+        toggleDebugMode();
     });
 
     newGameButton.setSprite(&newGameSprite);
@@ -60,7 +58,9 @@ int launch() {
     toolbox.debugButton = &debugButton;
     toolbox.testButton1 = &test1Button;
     toolbox.testButton2 = &test2Button;
+    toolbox.testButton3 = &test3Button;
 
+    toolbox.gameState = new GameState("boards/testboard3.brd");
 
 
     while (window.isOpen()) {
@@ -69,43 +69,71 @@ int launch() {
             if (event.type == sf::Event::Closed)
                 window.close();
             if (event.type == sf::Event::MouseButtonPressed) {
-                // Get mouse position and convert it to grid coordinates
+                // Convert the mouse position to grid coordinates
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                sf::Vector2i gridPos(mousePos.x / 32, mousePos.y / 32); // Assuming TILE_SIZE is the size of your tiles
+                sf::Vector2i gridPos(mousePos.x / 32, mousePos.y / 32); // Assuming a 32x32 tile size
 
+
+                if (newGameButton.contains(mousePos.x, mousePos.y)) {
+                    newGameButton.onClick();
+                } else if (test1Button.contains(mousePos.x, mousePos.y)) {
+                    test1Button.onClick();
+                } else if (test2Button.contains(mousePos.x, mousePos.y)) {
+                    test2Button.onClick();
+                } else if (test3Button.contains(mousePos.x, mousePos.y)) {
+                    test3Button.onClick();
+                } else {
+
+
+
+                // Check if the click is within the grid bounds
                 if (isValidPosition(gridPos, toolbox.gameState->getDimensions())) {
+                    // Get the tile at the grid position
                     Tile& clickedTile = toolbox.gameState->getTile(gridPos.x, gridPos.y);
 
-                    if (event.mouseButton.button == sf::Mouse::Left && clickedTile.getState() != Tile::State::FLAGGED) {
+                    // Left-click on tile
+                    if (event.mouseButton.button == sf::Mouse::Left) {
                         clickedTile.onClickLeft();
                     }
+                        // Right-click on tile
                     else if (event.mouseButton.button == sf::Mouse::Right) {
                         clickedTile.onClickRight();
                         toolbox.gameState->updateFlagCount();
                     }
-                }
+                    toolbox.gameState->draw(*toolbox.window);
+                }}
             }
+
+            toolbox.debugButton->handleEvent(event);
+            toolbox.newGameButton->handleEvent(event);
+            toolbox.testButton1->handleEvent(event);
+            toolbox.testButton2->handleEvent(event);
+            toolbox.testButton3->handleEvent(event);
+
+
+
+            toolbox.window->clear();
+            toolbox.gameState->draw(*toolbox.window);
+            toolbox.newGameButton->draw(*toolbox.window);
+            toolbox.debugButton->draw(*toolbox.window);
+            toolbox.testButton1->draw(*toolbox.window);
+            toolbox.testButton2->draw(*toolbox.window);
+            toolbox.testButton3->draw(*toolbox.window);
+
+
+            toolbox.window->display();
         }
-        toolbox.gameState = new GameState("boards/testboard1.brd");
-        toolbox.debugButton->handleEvent(event);
-        toolbox.newGameButton->handleEvent(event);
-        toolbox.gameState->updateMineCounterDisplay();
-
-
-        toolbox.window->clear();
-        toolbox.gameState->draw(window);
-        toolbox.newGameButton->draw(window);
-        toolbox.debugButton->draw(window);;
-        toolbox.testButton1->draw(window);
-        toolbox.testButton2->draw(window);
-
-
-        toolbox.window->display();
-
     }
+
     delete toolbox.gameState;
     delete toolbox.debugButton;
     delete toolbox.newGameButton;
+    delete toolbox.window;
+    delete toolbox.testButton1;
+    delete toolbox.testButton2;
+    delete toolbox.testButton3;
+
+
     return 0;
 }
 

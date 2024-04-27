@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <array>
+#include <iostream>
 
 class Tile {
 public:
@@ -20,11 +21,9 @@ public:
     sf::Vector2f getLocation() const;
     State getState() const;
     void setState(State state);
-//    void setNeighbors(const std::array<Tile*, 8>& neighbors);
     void onClickLeft();
     void onClickRight();
-//    bool hasMine() const;
-//    void revealNeighbors();
+
 
     bool hasMine;
 
@@ -32,18 +31,12 @@ private:
     sf::Vector2f position;
     int gridX, gridY;
     std::array<Tile*, 8> neighbors;
-    sf::Sprite sprite;
+    sf::Sprite baseSprite;
+    sf::Sprite overlaySprite;
     sf::Texture texture;
-
+    sf::Texture overlayTexture;
 
     State state;
-//
-//    sf::Vector2f position;
-//    State state;
-//
-//    std::array<Tile*, 8> neighbors;
-//    sf::Texture texture;
-
 
 
 };
