@@ -9,6 +9,8 @@ public:
     Button(sf::Vector2f position, std::function<void()> onClick);
 
     void setSprite(sf::Sprite* _sprite);
+    sf::Sprite* getSprite();
+    sf::Vector2f getPosition();
     void draw(sf::RenderWindow& window);
     void onClick();
     void handleEvent(const sf::Event& event);

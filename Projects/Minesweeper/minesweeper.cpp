@@ -2,7 +2,6 @@
 // Created by jreyn on 4/16/2024.
 //
 #include "minesweeper.h"
-bool debugMode = false;
 
 
 int launch() {
@@ -30,7 +29,6 @@ int launch() {
 
     GameState* gameState = new GameState("boards/testboard3.brd");
 
-
     auto resetGame = [&window, &gameState](const char* boardPath) {
         delete gameState;
         gameState = new GameState(boardPath);
@@ -46,7 +44,7 @@ int launch() {
 
     Button debugButton(sf::Vector2f(488, 513), [&]() {
 
-        toggleDebugMode();
+        toggleDebugMode(&toolbox);
     });
 
     newGameButton.setSprite(&newGameSprite);
@@ -59,8 +57,6 @@ int launch() {
     toolbox.testButton1 = &test1Button;
     toolbox.testButton2 = &test2Button;
     toolbox.testButton3 = &test3Button;
-
-    toolbox.gameState = new GameState("boards/testboard3.brd");
 
 
     while (window.isOpen()) {
@@ -81,6 +77,8 @@ int launch() {
                 } else if (test2Button.contains(mousePos.x, mousePos.y)) {
                     test2Button.onClick();
                 } else if (test3Button.contains(mousePos.x, mousePos.y)) {
+                    test3Button.onClick();
+                }  else if (debugButton.contains(mousePos.x, mousePos.y)) {
                     test3Button.onClick();
                 } else {
 
@@ -149,9 +147,24 @@ void render(sf::RenderWindow& window) {
     // This function will get the current game state and call the draw method on each game element
 }
 
-void toggleDebugMode() {
-    // Toggle the debug mode state
-    debugMode = !debugMode;
+void toggleDebugMode(Toolbox *toolbox) {
+
+    std::cout << "I hate this project" << std::endl;
+    if(debugMode){
+        debugMode = false;
+
+    }else{
+        debugMode = true;
+        sf::Vector2i boardDimensions = toolbox->gameState->getDimensions();
+        for(i = 0; i < boardDimensions.y; i++){
+            for(j = 0; j < boardDimensions.x; i++){
+                Tile tile = toolbox->gameState->getTile(i, j);
+                tile.reveal();
+            }
+        }
+
+    }
+
 }
 
 bool getDebugMode() {

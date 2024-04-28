@@ -75,17 +75,16 @@ void Tile::setState(State newState) {
 }
 
 void Tile::onClickLeft() {
-    std::cout << "FUCKK";
     if (state == State::FLAGGED || state == State::REVEALED) {
         return;
     }
 
     if (hasMine) {
 
+
         overlayTexture.loadFromFile("images/mine.png");
         overlaySprite.setTexture(overlayTexture);
-        texture.loadFromFile("images/tile_hidden.png");
-        baseSprite.setTexture(texture);
+
         state = State::EXPLODED;
 
     } else {
@@ -96,7 +95,6 @@ void Tile::onClickLeft() {
 }
 
 void Tile::onClickRight() {
-    std::cout << "do tjing";
     if (state == State::REVEALED) {
         return; // Do nothing if the tile is already revealed
     }
