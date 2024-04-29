@@ -22,7 +22,6 @@ private:
     sf::Sprite sprite;
     std::function<void()> onClickCallback;
 
-    bool contains(const sf::Vector2i &point) const;
 };
 
 #endif

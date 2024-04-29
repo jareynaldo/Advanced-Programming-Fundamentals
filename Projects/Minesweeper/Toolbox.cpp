@@ -14,15 +14,12 @@ void onNewGameClick() {
     resetGame(sf::Vector2i(26, 16), 50, "mark");
 }
 void onTest1Click() {
-    // Reset the game with the test board 1
     resetGame(sf::Vector2i(26, 16), 50, "boards/testboard1.brd");
 }
 void onTest2Click() {
-    // Reset the game with the test board 2
     resetGame(sf::Vector2i(26, 16), 50, "boards/testboard2.brd");
 }
 void onTest3Click() {
-    // Reset the game with the test board 3
     resetGame(sf::Vector2i(26, 16), 50, "boards/testboard3.brd");
 }
 
@@ -59,4 +56,5 @@ Toolbox::Toolbox() {
     debugButton->setSprite(&debugSprite);
 
     gameState = new GameState(sf::Vector2i(26, 16), 50);
+
 }

@@ -32,7 +32,6 @@ void Tile::setNeighbors(const std::array<Tile *, 8> &newNeighbors) {
 }
 
 
-
 int Tile::countAdjacentMines() {
     int mineCount = 0;
     for (int i = 0; i < neighbors.size(); ++i) {
@@ -56,14 +55,6 @@ void Tile::revealNeighbors() {
         }
     }
 }
-
-
-
-
-sf::Vector2f Tile::getLocation() const {
-    return position;
-}
-
 
 Tile::State Tile::getState() const {
     return state;
@@ -121,7 +112,6 @@ void Tile::reveal() {
     baseSprite.setTexture(texture);
 
     if (mines > 0) {
-        // Set the overlay texture to the number corresponding to the count of adjacent mines.
         overlayTexture.loadFromFile("images/number_" + std::to_string(mines) + ".png");
         overlaySprite.setTexture(overlayTexture);
     } else {
@@ -132,5 +122,12 @@ void Tile::reveal() {
             }
         }
     }
-    // Note: Ensure you have logic to draw both the baseSprite and the overlaySprite.
+}
+
+sf::Vector2f Tile::getLocation() {
+    return position;
+}
+
+std::array<Tile *, 8> &Tile::getNeighbors() {
+    return neighbors;
 }

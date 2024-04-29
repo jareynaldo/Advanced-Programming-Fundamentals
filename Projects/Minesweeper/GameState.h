@@ -32,6 +32,12 @@ public:
     int countFlags() const;
 
 
+    PlayStatus currentFaceState = PlayStatus::WIN;
+    sf::Texture faceTexture;
+    sf::Sprite faceSprite;
+
+    bool checkVictory();
+
 private:
     std::vector<std::vector<Tile>> board;
     sf::Texture tileTexture;
@@ -41,10 +47,8 @@ private:
     int flagCount;
 
 
-
-
-
     sf::Vector2i getDimensions() const;
+
 };
 
 #endif

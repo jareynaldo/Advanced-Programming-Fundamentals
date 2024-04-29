@@ -39,6 +39,17 @@ int launch() {
                     // Get the tile at the grid position
                     Tile& clickedTile = toolbox.gameState->getTile(gridPos.x, gridPos.y);
 
+                    if (clickedTile.hasMine) {
+                        toolbox.gameState->currentFaceState = GameState::PlayStatus::LOSS;
+                        toolbox.gameState->faceTexture.loadFromFile("images/face_lose.png");
+                        toolbox.gameState->faceSprite.setTexture(toolbox.gameState->faceTexture);
+                    }
+
+                    if (toolbox.gameState->checkVictory()) {
+                        toolbox.gameState->currentFaceState = GameState::PlayStatus::WIN;
+                        toolbox.gameState->faceTexture.loadFromFile("images/face_win.png");
+                        toolbox.gameState->faceSprite.setTexture(toolbox.gameState->faceTexture);
+                    }
                     // Left-click on tile
                     if (event.mouseButton.button == sf::Mouse::Left) {
                         clickedTile.onClickLeft();
@@ -48,21 +59,17 @@ int launch() {
                         clickedTile.onClickRight();
                         toolbox.gameState->updateFlagCount();
                     }
-                    toolbox.gameState->draw(*toolbox.window);
+
                 }}
+
             }
 
-            toolbox.debugButton->handleEvent(event);
-            toolbox.newGameButton->handleEvent(event);
-            toolbox.testButton1->handleEvent(event);
-            toolbox.testButton2->handleEvent(event);
-            toolbox.testButton3->handleEvent(event);
+
 
 
 
             toolbox.window->clear();
             toolbox.gameState->draw(*toolbox.window);
-            toolbox.newGameButton->draw(*toolbox.window);
             toolbox.debugButton->draw(*toolbox.window);
             toolbox.testButton1->draw(*toolbox.window);
             toolbox.testButton2->draw(*toolbox.window);
@@ -87,14 +94,11 @@ int launch() {
 
 
 void restart() {
-    // Reset the game state and board, potentially turn off debug mode
-    // This function should create a new GameState object and set up the board
     debugMode = false;
 }
 
 void render(sf::RenderWindow& window) {
-    // Draw all the game elements: board, tiles, buttons, etc.
-    // This function will get the current game state and call the draw method on each game element
+
 }
 
 void toggleDebugMode(Toolbox *toolbox) {
@@ -118,7 +122,6 @@ void toggleDebugMode(Toolbox *toolbox) {
 }
 
 bool getDebugMode() {
-    // Return the current state of the debug mode
     return debugMode;
 }
 bool isValidPosition(const sf::Vector2i& pos, const sf::Vector2i& dimensions) {

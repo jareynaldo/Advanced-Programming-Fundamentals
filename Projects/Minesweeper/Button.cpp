@@ -42,3 +42,7 @@ bool Button::contains(int mouseX, int mouseY) const {
 sf::Vector2<float> Button::getPosition(){
     return position;
 }
+
+sf::Sprite *Button::getSprite() {
+    return &sprite;
+}

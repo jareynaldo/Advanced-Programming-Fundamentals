@@ -63,6 +63,9 @@ GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines): mineCount(_n
         digitSprites[i].setTextureRect(sf::IntRect(0, 0, 21, 32));
         digitSprites[i].setPosition(sf::Vector2f(21*i, 513));
     }
+    faceTexture.loadFromFile("images/face_happy.png");
+    faceSprite.setTexture(faceTexture);
+    faceSprite.setPosition(sf::Vector2f(360, 513));
 }
 
 GameState::GameState(const char* filepath): mineCount(50), flagCount(0) {
@@ -73,9 +76,10 @@ GameState::GameState(const char* filepath): mineCount(50), flagCount(0) {
     std::ifstream file(filepath);
     std::string line;
     int y = 0;
+    mineCount = 0;
 
     while (std::getline(file, line)) {
-        std::istringstream lineStream(line); 
+        std::istringstream lineStream(line);
         int x = 0;
         char ch;
 
@@ -86,6 +90,7 @@ GameState::GameState(const char* filepath): mineCount(50), flagCount(0) {
 
             if (ch == '1') {
                 tileRow.back().setMine(true);
+                mineCount += 1;
             }
             x++;
         }
@@ -115,6 +120,7 @@ GameState::GameState(const char* filepath): mineCount(50), flagCount(0) {
             board[y][x].setNeighbors(neighbors);
         }
     }
+
     digitsTexture.loadFromFile("images/digits.png");
     for (int i = 0; i < digitSprites.size(); ++i) {
         digitSprites[i].setTexture(digitsTexture);
@@ -122,6 +128,14 @@ GameState::GameState(const char* filepath): mineCount(50), flagCount(0) {
         digitSprites[i].setTextureRect(sf::IntRect(0, 0, 21, 32));
         digitSprites[i].setPosition(sf::Vector2f(21*i, 513));
     }
+
+    faceTexture.loadFromFile("images/face_happy.png");
+    faceSprite.setTexture(faceTexture);
+    faceSprite.setPosition(sf::Vector2f(360, 513));
+
+    currentFaceState = GameState::PlayStatus ::WIN;
+    faceTexture.loadFromFile("images/face_happy.png");
+    faceSprite.setTexture(faceTexture);
 }
 
 
@@ -136,24 +150,10 @@ void GameState::draw(sf::RenderWindow& window) {
         window.draw(sprite);
     }
 
+    window.draw(faceSprite);
 
 }
-int GameState::countAdjacentMines(int x, int y) {
-    int count = 0;
-    for (int i = -1; i <= 1; ++i) {
-        for (int j = -1; j <= 1; ++j) {
-            int neighborX = x + i;
-            int neighborY = y + j;
-            // Check if the neighbor is within the bounds of the board
-            if (neighborX >= 0 && neighborX < 800 && neighborY >= 0 && neighborY < 600) {
-                if (board[neighborY][neighborX].hasMine) {
-                    count++;
-                }
-            }
-        }
-    }
-    return count;
-}
+
 void GameState::updateMineCounterDisplay() {
     int remainingMines = mineCount - flagCount;
     std::string countStr = std::to_string(std::abs(remainingMines));
@@ -216,4 +216,27 @@ int GameState::countFlags() const {
         }
     }
     return flags;
+}
+
+bool GameState::checkVictory() {
+    bool allMinesFlagged = true;
+    bool allSafeTilesRevealed = true;
+
+    for (const auto& row : board) {
+        for (const auto& tile : row) {
+            Tile::State stater = tile.getState();
+            if (tile.hasMine) {
+                if (stater != Tile::State::FLAGGED) {
+                    allMinesFlagged = false; // There's at least one mine that is not flagged.
+                }
+            } else {
+                if (stater != Tile::State::REVEALED) {
+                    allSafeTilesRevealed = false; // There's at least one safe tile that is not revealed.
+                }
+            }
+        }
+    }
+
+    // The game is won if all mines are flagged and all safe tiles are revealed
+    return allMinesFlagged && allSafeTilesRevealed;
 }

@@ -13,14 +13,16 @@ public:
     enum class State { REVEALED, HIDDEN, FLAGGED, EXPLODED };
     void setMine(bool mine);
     void draw(sf::RenderWindow& window);
-    void setNeighbors(const std::array<Tile*, 8>& newNeighbors);
     int countAdjacentMines();
     void reveal();
     void revealNeighbors();
 
-    sf::Vector2f getLocation() const;
+    void setNeighbors(const std::array<Tile*, 8>& newNeighbors);
+    std::array<Tile*, 8>& getNeighbors();
+    sf::Vector2f getLocation();
     State getState() const;
-    void setState(State state);
+    void setState(State _state);
+
     void onClickLeft();
     void onClickRight();
 
