@@ -75,7 +75,7 @@ GameState::GameState(const char* filepath): mineCount(50), flagCount(0) {
     int y = 0;
 
     while (std::getline(file, line)) {
-        std::istringstream lineStream(line);
+        std::istringstream lineStream(line); 
         int x = 0;
         char ch;
 
@@ -84,9 +84,9 @@ GameState::GameState(const char* filepath): mineCount(50), flagCount(0) {
             sf::Vector2f position(x * 32, y * 32);
             tileRow.emplace_back(position, tileTexture, x, y);
 
-            if(ch == 1){
-                tileRow[x].setMine(ch);
-            };
+            if (ch == '1') {
+                tileRow.back().setMine(true);
+            }
             x++;
         }
         board.push_back(tileRow);

@@ -3,6 +3,8 @@
 
 Button::Button(sf::Vector2f position, std::function<void()> onClick)  : position(position), sprite()  {
    sprite.setPosition(position);
+    onClickCallback = onClick;
+
 
 }
 
@@ -37,4 +39,6 @@ bool Button::contains(int mouseX, int mouseY) const {
            mouseY >= position.y && mouseY < position.y + 64;
 }
 
-
+sf::Vector2<float> Button::getPosition(){
+    return position;
+}

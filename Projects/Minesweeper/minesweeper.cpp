@@ -12,53 +12,6 @@ int launch() {
     toolbox.window = &window;
 
 
-    sf::Texture newGameTexture, debugTexture, test1Texture, test2Texture, test3Texture;
-    sf::Sprite newGameSprite, debugSprite, test1Sprite, test2Sprite,test3Sprite;
-    newGameTexture.loadFromFile("images/face_happy.png");
-    debugTexture.loadFromFile("images/debug.png");
-    test1Texture.loadFromFile("images/test_1.png");
-    test2Texture.loadFromFile("images/test_2.png");
-    test2Texture.loadFromFile("images/test_3.png");
-
-
-    newGameSprite.setTexture(newGameTexture);
-    debugSprite.setTexture(debugTexture);
-    test1Sprite.setTexture(test1Texture);
-    test2Sprite.setTexture(test2Texture);
-    test3Sprite.setTexture(test3Texture);
-
-    GameState* gameState = new GameState("boards/testboard3.brd");
-
-    auto resetGame = [&window, &gameState](const char* boardPath) {
-        delete gameState;
-        gameState = new GameState(boardPath);
-        window.clear();
-        gameState->draw(window);
-        window.display();
-    };
-    Button newGameButton(sf::Vector2f(360, 513), [&]() { resetGame("boards/testboard.brd"); });
-    Button test1Button(sf::Vector2f(552, 513), [&]() { resetGame("boards/testboard1.brd"); });
-    Button test2Button(sf::Vector2f(616, 513), [&]() { resetGame("boards/testboard2.brd"); });
-    Button test3Button(sf::Vector2f(680, 513), [&]() { resetGame("boards/testboard3.brd"); });
-
-
-    Button debugButton(sf::Vector2f(488, 513), [&]() {
-
-        toggleDebugMode(&toolbox);
-    });
-
-    newGameButton.setSprite(&newGameSprite);
-    debugButton.setSprite(&debugSprite);
-    test1Button.setSprite(&test1Sprite);
-    test2Button.setSprite(&test2Sprite);
-
-    toolbox.newGameButton = &newGameButton;
-    toolbox.debugButton = &debugButton;
-    toolbox.testButton1 = &test1Button;
-    toolbox.testButton2 = &test2Button;
-    toolbox.testButton3 = &test3Button;
-
-
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -67,22 +20,19 @@ int launch() {
             if (event.type == sf::Event::MouseButtonPressed) {
                 // Convert the mouse position to grid coordinates
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                sf::Vector2i gridPos(mousePos.x / 32, mousePos.y / 32); // Assuming a 32x32 tile size
+                sf::Vector2i gridPos(mousePos.x / 32, mousePos.y / 32);
 
-
-                if (newGameButton.contains(mousePos.x, mousePos.y)) {
-                    newGameButton.onClick();
-                } else if (test1Button.contains(mousePos.x, mousePos.y)) {
-                    test1Button.onClick();
-                } else if (test2Button.contains(mousePos.x, mousePos.y)) {
-                    test2Button.onClick();
-                } else if (test3Button.contains(mousePos.x, mousePos.y)) {
-                    test3Button.onClick();
-                }  else if (debugButton.contains(mousePos.x, mousePos.y)) {
-                    test3Button.onClick();
+                if (toolbox.newGameButton->contains(mousePos.x, mousePos.y)) {
+                    toolbox.newGameButton->onClick();
+                }else if (toolbox.testButton1->contains(mousePos.x, mousePos.y)) {
+                    toolbox.testButton1->onClick();
+                } else if (toolbox.testButton2->contains(mousePos.x, mousePos.y)) {
+                    toolbox.testButton2->onClick();
+                } else if (toolbox.testButton3->contains(mousePos.x, mousePos.y)) {
+                    toolbox.testButton3->onClick();
+                }  else if (toolbox.debugButton->contains(mousePos.x, mousePos.y)) {
+                    toolbox.debugButton->onClick();
                 } else {
-
-
 
                 // Check if the click is within the grid bounds
                 if (isValidPosition(gridPos, toolbox.gameState->getDimensions())) {
@@ -174,7 +124,9 @@ bool getDebugMode() {
 bool isValidPosition(const sf::Vector2i& pos, const sf::Vector2i& dimensions) {
     return pos.x >= 0 && pos.y >= 0 && pos.x < dimensions.x && pos.y < dimensions.y;
 }
-
+bool constains( sf::Vector2<float> pos, const sf::Vector2i& dimensions) {
+    return pos.x >= 0 && pos.y >= 0 && pos.x < dimensions.x && pos.y < dimensions.y;
+}
 
 int main() {
     return launch();

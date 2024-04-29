@@ -10,7 +10,7 @@ public:
 
     void setSprite(sf::Sprite* _sprite);
     sf::Sprite* getSprite();
-    sf::Vector2f getPosition();
+    sf::Vector2<float> getPosition();
     void draw(sf::RenderWindow& window);
     void onClick();
     void handleEvent(const sf::Event& event);
@@ -18,9 +18,11 @@ public:
 
 
 private:
-    sf::Vector2f position;
+    sf::Vector2<float> position;
     sf::Sprite sprite;
     std::function<void()> onClickCallback;
+
+    bool contains(const sf::Vector2i &point) const;
 };
 
 #endif

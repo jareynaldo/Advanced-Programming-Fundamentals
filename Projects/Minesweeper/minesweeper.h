@@ -17,6 +17,7 @@ void render(sf::RenderWindow& window);
 
 void toggleDebugMode(Toolbox *toolbox);
 bool isValidPosition(const sf::Vector2i& pos, const sf::Vector2i& dimensions);
+bool constains( sf::Vector2<float> pos, const sf::Vector2i& dimensions);
 
 bool getDebugMode();
 bool debugMode = false;

@@ -95,8 +95,8 @@ void Tile::onClickLeft() {
 }
 
 void Tile::onClickRight() {
-    if (state == State::REVEALED) {
-        return; // Do nothing if the tile is already revealed
+    if (state == State::REVEALED || state == State::EXPLODED) {
+        return;
     }
 
     if (state == State::HIDDEN) {
@@ -106,7 +106,7 @@ void Tile::onClickRight() {
         state = State::HIDDEN;
         texture.loadFromFile("images/tile_hidden.png");
     }
-    overlaySprite.setTexture(texture); // Update the texture for the sprite
+    overlaySprite.setTexture(texture);
 }
 void Tile::reveal() {
     if (state == State::FLAGGED || state == State::REVEALED) {
